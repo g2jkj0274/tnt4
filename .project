@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>tnt4_pro</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>sbs_proj_db_data.sql</name>
+			<type>1</type>
+			<location>C:/work/초급 프로젝트/eclipse/tnt4_pro/sbs_proj_db_data.sql</location>
+		</link>
+		<link>
+			<name>tnt4.sql</name>
+			<type>1</type>
+			<location>C:/work/초급 프로젝트/eclipse/tnt4_pro/tnt4.sql</location>
+		</link>
+	</linkedResources>
+</projectDescription>
