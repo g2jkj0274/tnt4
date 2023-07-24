@@ -48,7 +48,7 @@ public class ArticleController extends Controller {
 		
 		switch(select) {
 		case "1":
-			showSelectPlace();
+			showPlaceExercise("1","2");/////!!!!!!!!!!!!!!!!!!
 			break;
 		case "2":
 			showSelectEat();
@@ -68,7 +68,7 @@ public class ArticleController extends Controller {
 		showPlaceExercise(selectPlace, selectExercise);
 	}
 	private void showPlaceExercise(String selectPlace, String selectExercise) {
-		articleService.getExerciseList(selectPlace, selectExercise);
+		System.out.println(articleService.getExerciseList(selectPlace, selectExercise));
 	}
 	private void showSelectEat() {
 		System.out.println("다이어트 : 1 - 벌크업 : 2");

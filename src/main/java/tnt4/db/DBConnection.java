@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DBConnection {
-	private Connection connection;
+	public static Connection connection;
 	public static String DB_NAME;
 	public static String DB_USER;
 	public static String DB_PASSWORD;

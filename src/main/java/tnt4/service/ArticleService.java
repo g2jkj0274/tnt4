@@ -7,7 +7,7 @@ public class ArticleService {
 	public ArticleService() {
 		articleDao = Container.articleDao;
 	}
-	public void getExerciseList(String selectPlace, String selectExercise) {
-		articleDao.getExerciseList();
+	public String getExerciseList(String selectPlace, String selectExercise) {
+		return articleDao.getExerciseList(selectPlace, selectExercise);
 	}
 }

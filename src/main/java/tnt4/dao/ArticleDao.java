@@ -1,5 +1,10 @@
 package tnt4.dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,17 +15,37 @@ import tnt4.dto.Article;
 public class ArticleDao extends Dao {
 	public List<Article> articles;
 	private DBConnection dbConnection;
+	private Statement statement;
+	private ResultSet resultSet;
+	private Connection connection;
+	private String url = "jdbc:mysql://localhost:3306/tnt4";
+	private String userName = "root";
+	private String password = "";
 	
 	public ArticleDao() {
 		articles = new ArrayList<>();
-		dbConnection = Container.getDBConnection();
+		try {
+			connection = DriverManager.getConnection(url, userName, password);
+			statement = connection.createStatement();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
-	public void getExerciseList() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("name = '%s', ", exercise.name));
-		sb.append(String.format("location = '%s', ", exercise.location));
-		sb.append(String.format("kind = '%s', ", exercise.kind));
-		sb.append(String.format("link = '%s' ", exercise.link));
+	public String getExerciseList(String selectPlace, String selectExercise) {
+		try {
+			resultSet = statement.executeQuery("SELECT `name` FROM `exercise`\r\n"
+					+ "WHERE location = '헬스장' AND kind = '무산소';");
+			String answer = resultSet.getString("name");
+			return answer;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "실패";
+		
+		
+		
 	}
 }
