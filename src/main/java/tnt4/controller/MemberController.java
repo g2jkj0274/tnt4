@@ -80,11 +80,21 @@ public class MemberController extends Controller {
 		System.out.printf("생년월일 : ");
 		String birth = sc.nextLine();
 		System.out.printf("키 : ");
-		String height = sc.nextLine();
+		int height = sc.nextInt();
+		sc.nextLine();
 		System.out.printf("몸무게 : ");
-		String weight = sc.nextLine();
+		int weight = sc.nextInt();
+		sc.nextLine();
 		memberService.join(loginId, loginPw, name, gender, birth, height, weight);
-		System.out.printf("회원가입이 완료되었습니다. [%s] 님 환영합니다^^\n", name);
+		System.out.println("회원가입이 완료되었습니다. [%s]");
+		
+		// 회원가입 후 정보 유지, DB에 저장
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		session.setLoginedMember(member);
+		Member loginedMember = session.getLoginedMember();
+
+		System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedMember.name);
 	}
 	
 	public static void doLogin() {
@@ -123,9 +133,11 @@ public class MemberController extends Controller {
 		System.out.println("몸무게:"+session.getLoginedMember().weight);
 		
 		System.out.println("- - -");
-		System.out.println("비밀번호 변경 : changePw");
+		System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
 		String changePw = sc.nextLine();
-		if(changePw.equals(changePw)) {
+		if(changePw.equals("1")) {
+		}
+		else if(changePw.equals(changePw)) {
 			dochangePw();
 		}
 	}
@@ -141,6 +153,7 @@ public class MemberController extends Controller {
 		String loginPw = null;
 		String loginPwConfirm = null;
 		while ( true ) {
+			System.out.println("현재 아이디는 " +member.loginId);
 			System.out.printf("변경할 비밀번호 : ");
 			loginPw = sc.nextLine();
 			System.out.printf("비밀번호 확인 : ");
@@ -150,7 +163,7 @@ public class MemberController extends Controller {
 				System.out.println("비밀번호를 다시 입력해주세요.");
 				continue;
 			}
-			memberService.changeNewPw(loginPw);
+			memberService.changeNewPw(loginPw,member.loginId); 
 			System.out.println("비밀번호 변경 완료");
 			break;
 		}

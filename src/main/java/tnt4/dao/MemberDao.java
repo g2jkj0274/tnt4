@@ -53,11 +53,19 @@ public class MemberDao extends Dao {
 		sb.append(String.format("loginId = '%s', ", member.loginId));
 		sb.append(String.format("loginPw = '%s', ", member.loginPw));
 		sb.append(String.format("`name` = '%s' ", member.name));
+		sb.append(String.format("`name` = '%s' ", member.name));
+		sb.append(String.format("`name` = '%s' ", member.name));
+		sb.append(String.format("`name` = '%s' ", member.height));
+		sb.append(String.format("`name` = '%s' ", member.weight));
 		
 		return dbConnection.insert(sb.toString());
 	}
 
-	public void changePw(String loginPw) {
-		
+	public int changePw(String loginPw,String loginId) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("UPDATE `member` "));
+		sb.append(String.format("SET loginPw = '%s'",loginPw));
+		sb.append(String.format("WHERE loginId= '%s' ",loginId));
+		return dbConnection.insert(sb.toString());
 	}
 }

@@ -13,15 +13,14 @@ public class MemberService {
 	public Member getMemberByLoginId(String loginId) {
 		return memberDao.getMemberByLoginId(loginId);
 	}
-	public void join(String loginId, String loginPw, String name, String gender, String birth, String height, String weight) {
-		Member member = new Member(loginId, loginPw, name, gender, birth, height, weight);
-		memberDao.join(member);
-	}
-	
 	public Member getMember(int memberId) {
 		return memberDao.getMember(memberId);
 	}
-	public void changeNewPw(String loginPw) {
-		memberDao.changePw(loginPw);
+	public void changeNewPw(String loginPw,String loginId) {
+		memberDao.changePw(loginPw,loginId);
+	}
+	public void join(String loginId, String loginPw, String name, String gender, String birth, int height, int weight) {
+		Member member = new Member(loginId, loginPw, name, gender, birth, height, weight);
+		memberDao.join(member);
 	}
 }

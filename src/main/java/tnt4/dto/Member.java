@@ -7,7 +7,8 @@ import lombok.Data;
 public class Member extends Dto {
 	public String loginId;
 	public String loginPw; 
-	public String name, gender, birth, height, weight;
+	public String name, gender, birth;
+	public int height, weight;
 	
 	public Member(Map<String, Object> row) {
 		super(row);
@@ -16,11 +17,11 @@ public class Member extends Dto {
 		this.name = (String) row.get("name");
 		this.gender = (String) row.get("gender");
 		this.birth = (String) row.get("birth");
-		this.height = (String) row.get("height");
-		this.weight = (String) row.get("weight");
+		this.height = (int) row.get("height");
+		this.weight = (int) row.get("weight");
 	}
 	
-	public Member(String loginId, String loginPw, String name, String gender, String birth, String height, String weight) {
+	public Member(String loginId, String loginPw, String name, String gender, String birth, int height, int weight) {
 		this.loginId = loginId;
 		this.loginPw = loginPw;
 		this.name = name;
