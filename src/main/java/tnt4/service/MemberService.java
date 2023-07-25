@@ -10,8 +10,13 @@ public class MemberService {
 	public MemberService() {
 		memberDao = Container.memberDao;
 	}
+	//DB Data에 있는 ID 가져옴
 	public Member getMemberByLoginId(String loginId) {
 		return memberDao.getMemberByLoginId(loginId);
+	}
+	//DB Data에 있는 PW 가져옴
+	public Member getMemberByLoginPw(String loginPw) {
+		return memberDao.getMemberByLoginPw(loginPw);
 	}
 	public Member getMember(int memberId) {
 		return memberDao.getMember(memberId);

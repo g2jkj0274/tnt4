@@ -45,12 +45,16 @@ public class App {
 					break;
 				default:
 					System.out.println("다시 입력하세요");
-					continue;
+					//삭제 가능
+//					continue;
 				}
+				//해당 ID 없으면 다시 실행
+				continue;
 			}
 			System.out.println("[명령어 모음]");
 			System.out.println("1. 운동/식단 선택 : article select");
 			System.out.println("2. My Page : member info");
+			System.out.println("3. 로그아웃 : member logout");
 
 			System.out.printf("명령어) ");
 			String command = Container.getScanner().nextLine();

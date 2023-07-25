@@ -12,13 +12,28 @@ public class MemberDao extends Dao {
 	public MemberDao() {
 		dbConnection = Container.getDBConnection();
 	}
-	
+	//DB Data에 있는 ID 가져옴
 	public Member getMemberByLoginId(String loginId) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("SELECT * "));
 		sb.append(String.format("FROM `member` "));
 		sb.append(String.format("WHERE loginId = '%s' ", loginId));
+
+		Map<String, Object> memberRow = dbConnection.selectRow(sb.toString());
+
+		if ( memberRow.isEmpty() ) {
+			return null;
+		}
+		return new Member(memberRow);
+	}
+	//DB Data에 있는 PW 가져옴
+	public Member getMemberByLoginPw(String loginPw) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("SELECT * "));
+		sb.append(String.format("FROM `member` "));
+		sb.append(String.format("WHERE loginPw = '%s' ", loginPw));
 
 		Map<String, Object> memberRow = dbConnection.selectRow(sb.toString());
 

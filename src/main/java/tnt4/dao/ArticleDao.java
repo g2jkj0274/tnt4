@@ -32,7 +32,7 @@ public class ArticleDao extends Dao {
 		}
 		
 	}
-
+//test용, 기본 틀
 /*	public String getExerciseList(String selectPlace, String selectExercise) {
 		try {
 			resultSet = statement.executeQuery("SELECT `name` FROM `exercise`\r\n"
@@ -50,6 +50,9 @@ public class ArticleDao extends Dao {
 
     try {
         String query = "SELECT `name` FROM `exercise` WHERE location = ? AND kind = ?";
+        //Statement 클래스보다 기능이 향상된 클래스
+        //코드의 안정성과 가독성이 높다.
+        //인자 값으로 전달이 가능하다.
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, selectPlace);
         preparedStatement.setString(2, selectExercise);
@@ -60,7 +63,8 @@ public class ArticleDao extends Dao {
             String name = resultSet.getString("name");
             exerciseList.add(name);
         }
-    } catch (SQLException e) {
+    } 
+    catch (SQLException e) {
         e.printStackTrace();
     }
     return exerciseList;

@@ -145,7 +145,7 @@ public class MemberController extends Controller {
 	private void dochangePw() {
 		System.out.println("현재 비밀번호 : ");
 		String nowPw = sc.nextLine();
-		Member member = memberService.getMemberByLoginId(nowPw);
+		Member member = memberService.getMemberByLoginPw(nowPw);
 		if ( member.loginPw.equals(nowPw) == false ) {
 			System.out.println("비밀번호가 맞지 않습니다.");
 			return;
@@ -153,7 +153,7 @@ public class MemberController extends Controller {
 		String loginPw = null;
 		String loginPwConfirm = null;
 		while ( true ) {
-			System.out.println("현재 아이디는 " +member.loginId);
+			System.out.println("현재 아이디는 " + member.loginId);
 			System.out.printf("변경할 비밀번호 : ");
 			loginPw = sc.nextLine();
 			System.out.printf("비밀번호 확인 : ");
