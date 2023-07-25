@@ -1,5 +1,6 @@
 package tnt4.controller;
 
+import java.util.List;
 import java.util.Scanner;
 
 import tnt4.container.Container;
@@ -16,6 +17,7 @@ public class ArticleController extends Controller {
 		session = Container.getSession();
 		articleService = Container.articleService;
 	}
+	
 	public void doAction(String command, String actionMethodName) {
 		System.out.println(session.getLoginedMember().loginId);
 		this.command = command;
@@ -48,13 +50,13 @@ public class ArticleController extends Controller {
 		
 		switch(select) {
 		case "1":
-			showPlaceExercise("1","2");/////!!!!!!!!!!!!!!!!!!
+			showSelectPlace();/////!!!!!!!!!!!!!!!!!!
+//			showPlaceExercise("1", "3");
 			break;
 		case "2":
 			showSelectEat();
 			break;
 		}
-		
 	}
 	private void showSelectPlace() {
 		System.out.println("헬스장 / 홈 : ");
@@ -68,7 +70,12 @@ public class ArticleController extends Controller {
 		showPlaceExercise(selectPlace, selectExercise);
 	}
 	private void showPlaceExercise(String selectPlace, String selectExercise) {
-		System.out.println(articleService.getExerciseList(selectPlace, selectExercise));
+		// 리스트 형식으로 DB Data를 저장
+		List<String> exerciseList = articleService.getExerciseList(selectPlace, selectExercise);
+		// for문을 사용하여 리스트 출력
+		for (String exercise : exerciseList) {
+		    System.out.println(exercise);
+		}
 	}
 	private void showSelectEat() {
 		System.out.println("다이어트 : 1 - 벌크업 : 2");

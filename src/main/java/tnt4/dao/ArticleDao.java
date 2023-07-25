@@ -2,12 +2,12 @@ package tnt4.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import tnt4.container.Container;
 import tnt4.db.DBConnection;
@@ -33,19 +33,36 @@ public class ArticleDao extends Dao {
 		
 	}
 
-	public String getExerciseList(String selectPlace, String selectExercise) {
+/*	public String getExerciseList(String selectPlace, String selectExercise) {
 		try {
 			resultSet = statement.executeQuery("SELECT `name` FROM `exercise`\r\n"
 					+ "WHERE location = '헬스장' AND kind = '무산소';");
+			resultSet.next();
 			String answer = resultSet.getString("name");
 			return answer;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return "실패";
-		
-		
-		
+	}*/
+	public List<String> getExerciseList(String selectPlace, String selectExercise) {
+    List<String> exerciseList = new ArrayList<>();
+
+    try {
+        String query = "SELECT `name` FROM `exercise` WHERE location = ? AND kind = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, selectPlace);
+        preparedStatement.setString(2, selectExercise);
+
+        resultSet = preparedStatement.executeQuery();
+
+        while (resultSet.next()) {
+            String name = resultSet.getString("name");
+            exerciseList.add(name);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return exerciseList;
 	}
 }
