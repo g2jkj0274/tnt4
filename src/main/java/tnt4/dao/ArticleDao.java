@@ -32,7 +32,7 @@ public class ArticleDao extends Dao {
 		}
 		
 	}
-//test용, 기본 틀
+//test용, 기본 틀, [삭제 X]
 /*	public String getExerciseList(String selectPlace, String selectExercise) {
 		try {
 			resultSet = statement.executeQuery("SELECT `name` FROM `exercise`\r\n"

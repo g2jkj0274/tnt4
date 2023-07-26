@@ -36,7 +36,8 @@ public class MemberController extends Controller {
 			break;
 		}
 	}
-
+	
+	// 로그인 상태 확인
 	private static boolean isJoinableLoginId(String loginId) {
 		Member member = memberService.getMemberByLoginId(loginId);
 		
@@ -77,15 +78,15 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 		System.out.printf("성별 : ");
 		String gender = sc.nextLine();
-		System.out.printf("생년월일 : ");
-		String birth = sc.nextLine();
 		System.out.printf("키 : ");
 		int height = sc.nextInt();
 		sc.nextLine();
 		System.out.printf("몸무게 : ");
 		int weight = sc.nextInt();
 		sc.nextLine();
-		memberService.join(loginId, loginPw, name, gender, birth, height, weight);
+//		int bmiId;
+//		bmiId = getBmi(height, weight);
+		memberService.join(loginId, loginPw, name, gender, height, weight);
 		System.out.println("회원가입이 완료되었습니다. [%s]");
 		
 		// 회원가입 후 정보 유지, DB에 저장
@@ -116,7 +117,6 @@ public class MemberController extends Controller {
 		}
 		session.setLoginedMember(member);
 		Member loginedMember = session.getLoginedMember();
-
 		System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedMember.name);
 	}
 	
@@ -128,9 +128,9 @@ public class MemberController extends Controller {
 	private void showInfo() {
 		System.out.println("이름:"+session.getLoginedMember().name);
 		System.out.println("성별:"+session.getLoginedMember().gender);
-		System.out.println("생년월일:"+session.getLoginedMember().birth);
 		System.out.println("키:"+session.getLoginedMember().height);
 		System.out.println("몸무게:"+session.getLoginedMember().weight);
+//		System.out.println("BMI:"+session.getLoginedMember().bmiId);
 		
 		System.out.println("- - -");
 		System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
@@ -141,7 +141,8 @@ public class MemberController extends Controller {
 			dochangePw();
 		}
 	}
-
+	
+	// 비밀번호 변경
 	private void dochangePw() {
 		System.out.println("현재 비밀번호 : ");
 		String nowPw = sc.nextLine();
@@ -167,5 +168,29 @@ public class MemberController extends Controller {
 			System.out.println("비밀번호 변경 완료");
 			break;
 		}
+	}
+	
+	// bmi 공식
+	public static int getBmi(int height, int weight){
+		double bmi;
+		int bmiId;
+		
+		bmi = weight/(Math.pow(((float)height/100),2));
+		if(bmi<=18.5) {
+			bmiId=1;
+		}
+		else if(bmi <= 22.9) {
+			bmiId =2;
+		}
+		else if(bmi <= 24.9) {
+			bmiId =3;
+		}
+		else if(bmi >= 25) {
+			bmiId =3;
+		}
+		else {
+			return 0;
+		}
+		return bmiId;
 	}
 }

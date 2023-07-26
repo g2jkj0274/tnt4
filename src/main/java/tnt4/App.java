@@ -29,7 +29,7 @@ public class App {
 		while(true) {
 			String select = null;
 			if (Container.getSession().isLogined() == false) {
-				System.out.printf("로그인:1 - 회원가입:2 - 비회원:3 >>> ");
+				System.out.printf("로그인:1 - 회원가입:2 >>> ");
 				select = Container.getScanner().nextLine();
 				System.out.println("입력된 명령어 >>> " + select);
 
@@ -39,9 +39,6 @@ public class App {
 					break;
 				case "2":
 					MemberController.doJoin();
-					break;
-				case "3":
-					System.out.println("비회원으로 진행");
 					break;
 				default:
 					System.out.println("다시 입력하세요");

@@ -24,8 +24,8 @@ public class MemberService {
 	public void changeNewPw(String loginPw,String loginId) {
 		memberDao.changePw(loginPw,loginId);
 	}
-	public void join(String loginId, String loginPw, String name, String gender, String birth, int height, int weight) {
-		Member member = new Member(loginId, loginPw, name, gender, birth, height, weight);
+	public void join(String loginId, String loginPw, String name, String gender,int height, int weight) {
+		Member member = new Member(loginId, loginPw, name, gender, height, weight);
 		memberDao.join(member);
 	}
 }

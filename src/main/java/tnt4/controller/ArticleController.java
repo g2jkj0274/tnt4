@@ -11,16 +11,19 @@ public class ArticleController extends Controller {
 	private String command;
 	private Session session;
 	private ArticleService articleService;
-
+	
+	// 생성자 - 스캐너, 세션(현재 유저 정보), 서비스 사용 가능하게 함
 	public ArticleController() {
 		sc = Container.getScanner();
 		session = Container.getSession();
 		articleService = Container.articleService;
 	}
 	
+	// 입력한 명령어를 switch로 구분 
 	public void doAction(String command, String actionMethodName) {
 		System.out.println(session.getLoginedMember().loginId);
 		this.command = command;
+		// 관리자 계정이 사용 가능한 기능
 		if(session.getLoginedMember().loginId.equals("admin")) {
 			switch (actionMethodName) {
 			case "select":
@@ -31,6 +34,7 @@ public class ArticleController extends Controller {
 				break;
 			}
 		}
+		// 일반 사용자가 사용 가능한 기능
 		else {
 			switch (actionMethodName) {
 			case "select":
@@ -42,20 +46,23 @@ public class ArticleController extends Controller {
 			}
 		}
 	}
-	
+	// 운동/ 식단 선택
 	private void showSelect() {
 		System.out.println("운동 : 1 - 식단 : 2");
 		String select =sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + select);
 		
 		switch(select) {
+		// 1번이면 운동
 		case "1":
 			showSelectPlace();
 //			showPlaceExercise("1", "3");/////test용
 			break;
+		// 2번이면 식단
 		case "2":
 			showSelectEat();
 			break;
+		// 그 외의 입력시 다시 실행
 		default:
             System.out.println("올바른 값을 입력하세요.");
             showSelect(); // 재귀 호출하여 메서드를 다시 실행
@@ -63,12 +70,14 @@ public class ArticleController extends Controller {
 		}
 		
 	}
-	// 헬스장/홈 선택
+	
+	// 헬스장/홈트 선택
 	private void showSelectPlace() {
-		System.out.println("헬스장 / 홈 : ");
+		System.out.println("헬스장 / 홈트 : ");
 		String selectPlace = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + selectPlace);
-		if(!selectPlace.equals("헬스장") && !selectPlace.equals("홈")) {
+		// 헬스장 or 홈트 아니면 다시 실행
+		if(!selectPlace.equals("헬스장") && !selectPlace.equals("홈트")) {
 			System.out.println("올바른 장소를 입력하세요.");
 			showSelectPlace(); // 재귀 호출하여 메서드를 다시 실행
 			return;
@@ -81,6 +90,7 @@ public class ArticleController extends Controller {
 		System.out.println("유산소 / 무산소 : ");
 		String selectExercise = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + selectExercise);
+		// 유산소 or 무산소 아니면 다시 실행
 		if(!selectExercise.equals("유산소") && !selectExercise.equals("무산소")) {
 			System.out.println("올바른 운동 종류를 입력하세요.");
 			showSelectExercise(selectPlace); // 재귀 호출하여 메서드를 다시 실행
@@ -99,28 +109,26 @@ public class ArticleController extends Controller {
 		    System.out.println(exercise);
 		}
 	}
+	
 	// 식단 선택
+	// 다이어트 식단 - DB 식단 2, 3번, 벌크업 식단 - DB 1, 2번
 	private void showSelectEat() {
 		System.out.println("다이어트 : 1 - 벌크업 : 2");
 		String select =sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + select);
 		
+		// 수정 필요
 		switch(select) {
 		case "1":
-			showDiet();
+//			articleService.getFoodList(select);
 			break;
 		case "2":
-			showBulk();
+//			articleService.getFoodList(select);
 			break;
 		default:
             System.out.println("올바른 값을 입력하세요.");
             showSelectEat(); // 재귀 호출하여 메서드를 다시 실행
             break;
 		}
-	}
-	
-	private void showDiet() {
-	}
-	private void showBulk() {
 	}
 }

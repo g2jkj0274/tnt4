@@ -12,11 +12,24 @@ public class MemberDao extends Dao {
 	public MemberDao() {
 		dbConnection = Container.getDBConnection();
 	}
+	
 	//DB Data에 있는 ID 가져옴
 	public Member getMemberByLoginId(String loginId) {
 		StringBuilder sb = new StringBuilder();
-
 		sb.append(String.format("SELECT * "));
+		sb.append(String.format("FROM `member` "));
+		sb.append(String.format("WHERE loginId = '%s' ", loginId));
+		Map<String, Object> memberRow = dbConnection.selectRow(sb.toString());
+		if ( memberRow.isEmpty() ) {
+			return null;
+		}
+		return new Member(memberRow);
+	}
+	/*
+	public Member getMemberBmiIdByLoginId(String loginId) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("SELECT 'bmiId' "));
 		sb.append(String.format("FROM `member` "));
 		sb.append(String.format("WHERE loginId = '%s' ", loginId));
 
@@ -27,6 +40,7 @@ public class MemberDao extends Dao {
 		}
 		return new Member(memberRow);
 	}
+	*/
 	//DB Data에 있는 PW 가져옴
 	public Member getMemberByLoginPw(String loginPw) {
 		StringBuilder sb = new StringBuilder();
@@ -68,8 +82,8 @@ public class MemberDao extends Dao {
 		sb.append(String.format("loginId = '%s', ", member.loginId));
 		sb.append(String.format("loginPw = '%s', ", member.loginPw));
 		sb.append(String.format("`name` = '%s' ", member.name));
-		sb.append(String.format("`name` = '%s' ", member.name));
-		sb.append(String.format("`name` = '%s' ", member.name));
+		sb.append(String.format("`name` = '%s' ", member.gender));
+		sb.append(String.format("`name` = '%s' ", member.birth));
 		sb.append(String.format("`name` = '%s' ", member.height));
 		sb.append(String.format("`name` = '%s' ", member.weight));
 		
