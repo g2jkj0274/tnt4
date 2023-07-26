@@ -16,6 +16,8 @@ public class App {
 		DBConnection.DB_PASSWORD = "sbs123414";
 		DBConnection.DB_PORT = 3306;
 		
+		session = Container.getSession();
+		
 		Container.getDBConnection().connect();
 	}
 	
@@ -27,8 +29,8 @@ public class App {
 
 		while(true) {
 			String select = null;
-			if (Container.getSession().isLogined() == false) {
-				System.out.printf("로그인:1 - 회원가입:2 >>> ");
+			if (session.isLogined() == false) {
+				System.out.printf("로그인:1 - 회원가입:2 - 프로그램 종료:system exit >>> ");
 				select = Container.getScanner().nextLine();
 				System.out.println("입력된 명령어 >>> " + select);
 
@@ -39,45 +41,72 @@ public class App {
 				case "2":
 					MemberController.doJoin();
 					break;
+				case "system exit":
+					System.out.println("==프로그램을 종료합니다==");
+                    return; // 프로그램 종료
 				default:
 					System.out.println("다시 입력하세요");
-					//삭제 가능
-//					continue;
 				}
 				//해당 ID 없으면 다시 실행
 				continue;
 			}
-			System.out.println("[명령어 모음]");
-			System.out.println("1. 운동/식단 선택 : article select");
-			System.out.println("2. My Page : member info");
-			System.out.println("3. 로그아웃 : member logout");
-			System.out.println("4. 프로그램 종료 : system exit");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("");
+			System.out.println("[명령어 모음]======================");
+			System.out.println("1. 운동/식단 선택 : select item");
+			System.out.println("2. 공지사항 : notice board");
+			System.out.println("3. My Page : member info");
+			System.out.println("4. 로그아웃 : member logout");
+			System.out.println("5. 프로그램 종료 : system exit");
+			System.out.println("================================");
+			
+			if(session.getLoginedMember().loginId.equals("admin")) {
+				System.out.println("[관리자 권한 명령어 목록]=============");
+				System.out.println("공지사항 게시판 : ");
+				System.out.println("유저 관리 : ");
+				System.out.println("운동/식단 관리 : ");
+				System.out.println("================================");
+			}
 
 			System.out.printf("명령어) ");
 			String command = Container.getScanner().nextLine();
 			command = command.trim();
-
+			
+			// 아무것도 입력하지 않으면 다시 실행
 			if (command.length() == 0) {
 				continue;
 			}
+			
+			// 시스템 종료
 			if (command.equals("system exit")) {
 				break;
 			}
-			String[] commandBits = command.split(" "); // article ~~
+			
+			// command 분리
+			String[] commandBits = command.split(" ");
 			if (commandBits.length == 1) {
 				System.out.println("존재하지 않는 명령어");
 				continue;
 			}
 			String controllerName = commandBits[0]; // article
 			String actionMethodName = commandBits[1]; // member
-
+			
 			Controller controller = null;
 
 			if (controllerName.equals("article")) {
 				controller = articleController;
-			} else if (controllerName.equals("member")) {
+			} 
+			else if (controllerName.equals("member")) {
 				controller = memberController;
-			} else {
+			}
+			else if (controllerName.equals("select")) {
+				controller = articleController;
+			}
+			else if (controllerName.equals("notice")) {
+				controller = articleController;
+			} 
+			else {
 				System.out.println("존재하지 않는 명령어입니다.");
 				continue;
 			}
@@ -85,7 +114,8 @@ public class App {
 			switch (actionName) {
 			case "member/logout":
 			case "member/info":
-			case "article/select":
+			case "select/item":
+			case "Notice/board":
 				if (Container.getSession().isLogined() == false) {
 					System.out.println("로그인 후 이용");
 					continue;
@@ -102,9 +132,8 @@ public class App {
 				break;
 			}
 			controller.doAction(command, actionMethodName);
-
 		}
 		Container.getScanner().close();
-		System.out.println("== 프로그램 끝 ==");
+		System.out.println("==프로그램을 종료합니다==");
 	}
 }

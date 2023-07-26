@@ -31,4 +31,14 @@ public class Member extends Dto {
         this.weight = weight;
         this.bmiId = bmiId;
     }
+
+	// 회원 정보 수정 할떄는 이렇게 하는 함수 추가
+	// 회원 정보 수정항목때는 아이디랑 비번은 그대로이니까
+	public Member(String name, String gender, int height, int weight, int bmiId) {
+		this.name = name;
+		this.gender = gender;
+		this.height = height;
+		this.weight = weight;
+		this.bmiId = bmiId;
+	}
 }

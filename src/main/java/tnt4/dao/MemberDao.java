@@ -94,4 +94,24 @@ public class MemberDao extends Dao {
 		sb.append(String.format("WHERE loginId= '%s' ",loginId));
 		return dbConnection.insert(sb.toString());
 	}
+	
+	public void modify(Member member) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("UPDATE `member` "));
+		sb.append(String.format("SET `bmiId`='%d',  `name`='%s', `gender`='%s', `height`='%d', `weight`='%d' ",
+				member.bmiId, member.name, member.gender, member.height, member.weight));
+		sb.append(String.format("WHERE loginId='%s' ",member.loginId));
+
+
+		dbConnection.insert(sb.toString());
+		System.out.println("회원 정보가 수정되었습니다!");
+	}
+	
+	public void delete(Member member) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("DELETE FROM `member` "));
+		sb.append(String.format("WHERE loginId='%s' ",member.loginId));
+		dbConnection.insert(sb.toString());	
+	}
 }

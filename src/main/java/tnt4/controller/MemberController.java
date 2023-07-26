@@ -128,33 +128,36 @@ public class MemberController extends Controller {
 	// My Page
 	private void showInfo() {
 		System.out.println("= 내 정보 =");
-        System.out.println("이름:" + session.getLoginedMember().name);
-        System.out.println("성별:" + session.getLoginedMember().gender);
-        System.out.println("키:" + session.getLoginedMember().height);
-        System.out.println("몸무게:" + session.getLoginedMember().weight);
-        System.out.println("BMI:" + session.getLoginedMember().bmiId);
+		System.out.println("이름:" + session.getLoginedMember().name);
+		System.out.println("성별:" + session.getLoginedMember().gender);
+		System.out.println("키:" + session.getLoginedMember().height);
+		System.out.println("몸무게:" + session.getLoginedMember().weight);
+		System.out.println("BMI:" + session.getLoginedMember().bmiId);
 
-        System.out.println("- - -");
-        System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
-        
-        String changePw;
-        while (true) {
-            changePw = sc.nextLine();
-            if (changePw.equals("1") || changePw.equals("changePw")) {
-                break;
-            }
-            System.out.println("존재하지 않는 명령어 입니다. 다시 입력해주세요.");
-            System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
-        }
+		System.out.println("- - -");
+		System.out.println("돌아가기 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
 
-        switch (changePw) {
-            case "1":
-                return; // 돌아가기
-            case "changePw":
-                dochangePw();
-                return; // 돌아가기
-        }
-    }
+		while (true) {
+			String input = sc.nextLine();
+			switch (input) {
+			case "1":
+				return; // 돌아가기
+			case "2":
+				doModify(); // 회원 정보 수정
+				return;
+			case "3":
+				dochangePw(); // 비밀번호 변경
+				return;
+			case "4":
+				doDelete(session); // 회원 탈퇴
+				return;
+			default:
+				System.out.println("존재하지 않는 명령어 입니다. 다시 입력해주세요.");
+				System.out.println("돌아가기 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
+				break;
+			}
+		}
+	}
 	
 	// 비밀번호 변경
 	private void dochangePw() {
@@ -182,6 +185,46 @@ public class MemberController extends Controller {
 			System.out.println("비밀번호 변경 완료");
 			break;
 		}
+	}
+	
+	public static void doDelete(Session session) {
+	    Member loginedMember = session.getLoginedMember();
+	    System.out.println("진짜 탈퇴하시겠습니까 ? Y/N");
+	    // 수정함 : next() -> nextLine() - 이유 : next()로 하면 삭제 후 App클래스에서 다시 입력하세요가 출력됨
+	    String an = sc.nextLine();
+	    if(an.equals("Y") || an.equals("y")) {
+	        memberService.delete(loginedMember);
+	        session.setLoginedMember(null);
+	    }
+	    else if (an.equalsIgnoreCase("N")) {
+	        System.out.println("취소되었습니다.");
+	    }
+	}
+	
+	//수정 필요
+	//추가 , 회원 정보 수정 함수
+	public static void doModify() {
+		if(!session.isLogined()) {
+			System.out.println("로그인을 먼저 하십시오");
+		}
+		Member loginedMember = session.getLoginedMember();
+		System.out.println("수정을 시작");
+		System.out.printf("이름 : ");
+		String name = sc.nextLine();
+		System.out.printf("성별 : ");
+		String gender = sc.nextLine();
+		//제거
+		System.out.printf("키 : ");
+		int height = sc.nextInt();
+		sc.nextLine();
+		System.out.printf("몸무게 : ");
+		int weight = sc.nextInt();
+		sc.nextLine();
+		int bmiId; //추가
+		bmiId=getBmi(height,weight);
+		loginedMember.name =name; loginedMember.gender = gender; loginedMember.height=height;
+		loginedMember.weight = weight; loginedMember.bmiId=bmiId;
+		memberService.modify(gender, name, bmiId,  height, weight);
 	}
 	
 	// bmi 공식

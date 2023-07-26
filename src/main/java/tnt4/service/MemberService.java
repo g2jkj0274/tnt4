@@ -28,4 +28,11 @@ public class MemberService {
 		Member member = new Member(loginId, loginPw, name, gender, height, weight, bmiId);
 		memberDao.join(member);
 	}
+	public void modify(String name, String gender, int height, int weight, int bmiId) {
+		Member member = new Member(name, gender, height, weight, bmiId);
+		memberDao.modify(member);
+	}
+	public void delete(Member member) {
+		memberDao.delete(member);
+	}
 }

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import tnt4.container.Container;
+import tnt4.dto.NoticeBoard;
+import tnt4.dto.QnABoard;
 import tnt4.service.ArticleService;
 
 public class ArticleController extends Controller {
@@ -23,11 +25,15 @@ public class ArticleController extends Controller {
 	public void doAction(String command, String actionMethodName) {
 		System.out.println(session.getLoginedMember().loginId);
 		this.command = command;
+		
 		// 관리자 계정이 사용 가능한 기능
 		if(session.getLoginedMember().loginId.equals("admin")) {
 			switch (actionMethodName) {
-			case "select":
+			case "item":
 				showSelect();
+				break;
+			case "board":
+				showAnnouncement();
 				break;
 			default:
 				System.out.println("존재하지 않는 명령어 입니다.");
@@ -37,8 +43,11 @@ public class ArticleController extends Controller {
 		// 일반 사용자가 사용 가능한 기능
 		else {
 			switch (actionMethodName) {
-			case "select":
+			case "item":
 				showSelect();
+				break;
+			case "board":
+				showAnnouncement();
 				break;
 			default:
 				System.out.println("존재하지 않는 명령어 입니다.");
@@ -46,6 +55,89 @@ public class ArticleController extends Controller {
 			}
 		}
 	}
+	
+	// 공지사항 및 QnA 게시판 조회
+	private void showAnnouncement() {
+	    // 공지사항 목록 가져온 후 출력
+	    System.out.println("공지사항 ===============");
+	    List<NoticeBoard> noticeBoardList = articleService.getNoticeBoard();
+	    
+	    int index = 1;
+	    for (NoticeBoard noticeBoard : noticeBoardList) {
+	        System.out.println(index + ". " + noticeBoard.getName());
+	        index++;
+	    }
+	    System.out.println("======================");
+	    
+	    // 가독성 때문에 한 줄 띄움
+	    System.out.println("");
+	    
+	    // QnA 목록 가져온 후 출력
+	    System.out.println("QnA===================");
+	    List<QnABoard> QnABoardList = articleService.getQnABoard();
+	    
+	    index = 1;
+	    for (QnABoard QnABoard : QnABoardList) {
+	        System.out.println(index + ". " + QnABoard.getUserQuestionName());
+	        index++;
+	    }
+	    
+	    System.out.println("======================");
+	    
+	    System.out.println("- - -");
+	    
+	    System.out.println("공지사항 보기 : board 숫자");
+	    System.out.println("QnA 보기 : QnA 숫자");
+	    System.out.println("메인으로 돌아가기 : 1");
+	    // 1이 아니면 입력할 때 까지 while문으로 반복
+	    // 입력에 따른 처리
+	    while(true) {
+	        String select = sc.nextLine();
+	        try {
+	            if (select.equals("1")) {
+	                // 돌아가기
+	                break;
+	            }
+	            // 공지사항 선택 후 내용 보기
+	            else if (select.startsWith("board")) {
+	                // 공지사항 상세보기
+	                int selectedId = Integer.parseInt(select.substring(6));
+	                if (selectedId > 0 && selectedId <= noticeBoardList.size()) {
+	                    NoticeBoard selectedNotice = noticeBoardList.get(selectedId - 1);
+	                    System.out.println("제목 : " + selectedNotice.getName());
+	                    System.out.println("내용 : " + selectedNotice.getDetail());
+	                    System.out.println("======================");
+	                    System.out.println("돌아가기 : 1");
+	                } 
+	                else {
+	                    System.out.println("해당하는 공지사항이 없습니다.");
+	                }
+	            }
+	            // QnA 선택 후 내용 보기
+	            else if (select.startsWith("QnA")) {
+	                // QnA 상세보기
+	                int selectedId = Integer.parseInt(select.substring(3));
+	                if (selectedId > 0 && selectedId < QnABoardList.size()) {
+	                    QnABoard selectedQnA = QnABoardList.get(selectedId - 1);
+	                    System.out.println("질문: " + selectedQnA.getUserQuestionName());
+	                    System.out.println("답변: " + selectedQnA.getAdminAnswerText());
+	                    System.out.println("======================");
+	                    System.out.println("돌아가기 : 1");
+	                } 
+	                else {
+	                    System.out.println("해당하는 QnA가 없습니다.");
+	                }
+	            } 
+	            else {
+	                System.out.println("잘못된 입력입니다. 다시 입력하세요.");
+	            }
+	        } 
+	        catch (NumberFormatException e) {
+	            System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+	        }
+	    }
+	}
+
 	// 운동/ 식단 선택
 	private void showSelect() {
 		System.out.println("운동 : 1 - 식단 : 2");
@@ -56,7 +148,6 @@ public class ArticleController extends Controller {
 		// 1번이면 운동
 		case "1":
 			showSelectPlace();
-//			showPlaceExercise("1", "3");/////test용
 			break;
 		// 2번이면 식단
 		case "2":
@@ -110,30 +201,8 @@ public class ArticleController extends Controller {
 		}
 	}
 	
-	/*
-	private void showSelectEat() {
-		System.out.println("다이어트 : 1 - 벌크업 : 2");
-		String select =sc.nextLine();
-		System.out.println("입력된 명령어 >>> " + select);
-		
-		// 수정 필요
-		switch(select) {
-		case "1":
-//			articleService.getFoodList(select);
-			break;
-		case "2":
-//			articleService.getFoodList(select);
-			break;
-		default:
-            System.out.println("올바른 값을 입력하세요.");
-            showSelectEat(); // 재귀 호출하여 메서드를 다시 실행
-            break;
-		}
-	}
-	
 	// 식단 선택
 	// 다이어트 식단 - DB 식단 2, 3번, 벌크업 식단 - DB 1, 2번
-	*/
 	private void showSelectEat() {
 		String select = "";
 		while (true) {
