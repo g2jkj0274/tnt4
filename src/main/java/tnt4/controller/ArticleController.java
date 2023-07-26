@@ -112,6 +112,7 @@ public class ArticleController extends Controller {
 	
 	// 식단 선택
 	// 다이어트 식단 - DB 식단 2, 3번, 벌크업 식단 - DB 1, 2번
+	/*
 	private void showSelectEat() {
 		System.out.println("다이어트 : 1 - 벌크업 : 2");
 		String select =sc.nextLine();
@@ -130,5 +131,35 @@ public class ArticleController extends Controller {
             showSelectEat(); // 재귀 호출하여 메서드를 다시 실행
             break;
 		}
+	}
+	*/
+	private void showSelectEat() {
+		String select = "";
+		while (true) {
+			System.out.println("다이어트 : 1 - 벌크업 : 2");
+			select = sc.nextLine();
+			if (!select.equals("1") && !select.equals("2")) {
+				System.out.println("올바른 명령어를 입력해주세요");
+				continue;
+			}
+			System.out.println("입력된 명령어 >>> " + select);
+			break;
+		}
+		switch (select) {
+		case "1":
+			System.out.println("1번");
+			showDiet();
+			break;
+		case "2":
+			System.out.println("2번");
+			showBulk();
+			break;
+		}
+	}
+	private String showDiet() {
+		return articleService.getFoodList();
+	}
+	private String showBulk() {
+		return articleService.getFoodList();
 	}
 }

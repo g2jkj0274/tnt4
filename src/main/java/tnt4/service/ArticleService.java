@@ -12,7 +12,7 @@ public class ArticleService {
 	public List<String> getExerciseList(String selectPlace, String selectExercise) {
 		return articleDao.getExerciseList(selectPlace, selectExercise);
 	}
-	public void getFoodList(String select) {
-		
+	public String getFoodList() {
+		return articleDao.getFoodList();
 	}
 }

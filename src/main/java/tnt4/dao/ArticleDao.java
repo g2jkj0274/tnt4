@@ -69,4 +69,18 @@ public class ArticleDao extends Dao {
     }
     return exerciseList;
 	}
+	
+	public String getFoodList() {
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM food ");
+			while (resultSet.next()) {
+				// 3 -> 5, 4-> 6
+				System.out.println("이름 : " + resultSet.getString(5) + " // 칼로리 : " + resultSet.getString(6));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "실패";
+	}
 }
