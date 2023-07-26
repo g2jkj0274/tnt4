@@ -110,8 +110,6 @@ public class ArticleController extends Controller {
 		}
 	}
 	
-	// 식단 선택
-	// 다이어트 식단 - DB 식단 2, 3번, 벌크업 식단 - DB 1, 2번
 	/*
 	private void showSelectEat() {
 		System.out.println("다이어트 : 1 - 벌크업 : 2");
@@ -132,6 +130,9 @@ public class ArticleController extends Controller {
             break;
 		}
 	}
+	
+	// 식단 선택
+	// 다이어트 식단 - DB 식단 2, 3번, 벌크업 식단 - DB 1, 2번
 	*/
 	private void showSelectEat() {
 		String select = "";
@@ -156,6 +157,8 @@ public class ArticleController extends Controller {
 			break;
 		}
 	}
+	
+	// 식단 리스트 가져옴
 	private String showDiet() {
 		return articleService.getFoodList();
 	}

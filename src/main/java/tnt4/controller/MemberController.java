@@ -47,6 +47,7 @@ public class MemberController extends Controller {
 		return false;
 	}
 	
+	// 회원가입
 	public static void doJoin() {
 		String loginId = null;
 		
@@ -84,9 +85,9 @@ public class MemberController extends Controller {
 		System.out.printf("몸무게 : ");
 		int weight = sc.nextInt();
 		sc.nextLine();
-//		int bmiId;
-//		bmiId = getBmi(height, weight);
-		memberService.join(loginId, loginPw, name, gender, height, weight);
+		int bmiId;
+		bmiId = getBmi(height, weight);
+		memberService.join(loginId, loginPw, name, gender, height, weight, bmiId);
 		System.out.println("회원가입이 완료되었습니다. [%s]");
 		
 		// 회원가입 후 정보 유지, DB에 저장
@@ -125,22 +126,36 @@ public class MemberController extends Controller {
 		System.out.println("로그아웃 되었습니다.");
 	}
 	
+	// My Page
 	private void showInfo() {
-		System.out.println("이름:"+session.getLoginedMember().name);
-		System.out.println("성별:"+session.getLoginedMember().gender);
-		System.out.println("키:"+session.getLoginedMember().height);
-		System.out.println("몸무게:"+session.getLoginedMember().weight);
-//		System.out.println("BMI:"+session.getLoginedMember().bmiId);
-		
-		System.out.println("- - -");
-		System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
-		String changePw = sc.nextLine();
-		if(changePw.equals("1")) {
-		}
-		else if(changePw.equals(changePw)) {
-			dochangePw();
-		}
-	}
+		System.out.println("= 내 정보 =");
+        System.out.println("이름:" + session.getLoginedMember().name);
+        System.out.println("성별:" + session.getLoginedMember().gender);
+        System.out.println("키:" + session.getLoginedMember().height);
+        System.out.println("몸무게:" + session.getLoginedMember().weight);
+        System.out.println("BMI:" + session.getLoginedMember().bmiId);
+
+        System.out.println("- - -");
+        System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
+        
+        String changePw;
+        while (true) {
+            changePw = sc.nextLine();
+            if (changePw.equals("1") || changePw.equals("changePw")) {
+                break;
+            }
+            System.out.println("존재하지 않는 명령어 입니다. 다시 입력해주세요.");
+            System.out.println("비밀번호 변경 : changePw / 돌아가기 : 1");
+        }
+
+        switch (changePw) {
+            case "1":
+                return; // 돌아가기
+            case "changePw":
+                dochangePw();
+                return; // 돌아가기
+        }
+    }
 	
 	// 비밀번호 변경
 	private void dochangePw() {
@@ -171,7 +186,7 @@ public class MemberController extends Controller {
 	}
 	
 	// bmi 공식
-	public static int getBmi(int height, int weight){
+	public static int getBmi(int height, int weight) {
 		double bmi;
 		int bmiId;
 		

@@ -51,6 +51,7 @@ public class App {
 			System.out.println("1. 운동/식단 선택 : article select");
 			System.out.println("2. My Page : member info");
 			System.out.println("3. 로그아웃 : member logout");
+			System.out.println("4. 프로그램 종료 : system exit");
 
 			System.out.printf("명령어) ");
 			String command = Container.getScanner().nextLine();

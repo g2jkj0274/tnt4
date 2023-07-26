@@ -72,7 +72,7 @@ public class MemberDao extends Dao {
 
 		return new Member(row);
 	}
-	
+	/*
 	public int join(Member member) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -82,14 +82,26 @@ public class MemberDao extends Dao {
 		sb.append(String.format("loginId = '%s', ", member.loginId));
 		sb.append(String.format("loginPw = '%s', ", member.loginPw));
 		sb.append(String.format("`name` = '%s' ", member.name));
-		sb.append(String.format("`name` = '%s' ", member.gender));
-		sb.append(String.format("`name` = '%s' ", member.birth));
-		sb.append(String.format("`name` = '%s' ", member.height));
-		sb.append(String.format("`name` = '%s' ", member.weight));
+		sb.append(String.format("`gender` = '%s' ", member.gender));
+		sb.append(String.format("`height` = '%s' ", member.height));
+		sb.append(String.format("`weight` = '%s' ", member.weight));
 		
 		return dbConnection.insert(sb.toString());
 	}
-
+	*/
+	
+	public int join(Member member) {
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("INSERT INTO `member` ");
+		sb.append("(`bmiId`, `loginId`, `loginPw`, `name`, `gender`, `height`, `weight`) ");
+		sb.append(String.format("VALUES ('%d', '%s', '%s', '%s', '%s', '%d', '%d')",
+		     member.bmiId, member.loginId, member.loginPw, member.name, member.gender, member.height, member.weight));
+		
+		return dbConnection.insert(sb.toString());
+	}
+	
+	
 	public int changePw(String loginPw,String loginId) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("UPDATE `member` "));

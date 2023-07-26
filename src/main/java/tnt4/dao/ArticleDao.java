@@ -33,7 +33,8 @@ public class ArticleDao extends Dao {
 		
 	}
 //test용, 기본 틀, [삭제 X]
-/*	public String getExerciseList(String selectPlace, String selectExercise) {
+	/*
+	public String getExerciseList(String selectPlace, String selectExercise) {
 		try {
 			resultSet = statement.executeQuery("SELECT `name` FROM `exercise`\r\n"
 					+ "WHERE location = '헬스장' AND kind = '무산소';");
@@ -44,30 +45,32 @@ public class ArticleDao extends Dao {
 			e.printStackTrace();
 		}
 		return "실패";
-	}*/
+	}
+	*/
+	
 	public List<String> getExerciseList(String selectPlace, String selectExercise) {
-    List<String> exerciseList = new ArrayList<>();
+		List<String> exerciseList = new ArrayList<>();
 
-    try {
-        String query = "SELECT `name` FROM `exercise` WHERE location = ? AND kind = ?";
-        //Statement 클래스보다 기능이 향상된 클래스
-        //코드의 안정성과 가독성이 높다.
-        //인자 값으로 전달이 가능하다.
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setString(1, selectPlace);
-        preparedStatement.setString(2, selectExercise);
+		try {
+			String query = "SELECT `name` FROM `exercise` WHERE location = ? AND kind = ?";
+			// Statement 클래스보다 기능이 향상된 클래스
+			// 코드의 안정성과 가독성이 높다.
+			// 인자 값으로 전달이 가능하다.
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setString(1, selectPlace);
+			preparedStatement.setString(2, selectExercise);
 
-        resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 
-        while (resultSet.next()) {
-            String name = resultSet.getString("name");
-            exerciseList.add(name);
-        }
-    } 
-    catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return exerciseList;
+			while (resultSet.next()) {
+				String name = resultSet.getString("name");
+				exerciseList.add(name);
+			}
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return exerciseList;
 	}
 	
 	public String getFoodList() {

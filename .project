@@ -22,11 +22,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>sbs_proj_db_data.sql</name>
-			<type>1</type>
-			<location>C:/work/초급 프로젝트/eclipse/tnt4_pro/sbs_proj_db_data.sql</location>
-		</link>
-		<link>
 			<name>tnt4.sql</name>
 			<type>1</type>
 			<location>C:/work/초급 프로젝트/eclipse/tnt4_pro/tnt4.sql</location>
