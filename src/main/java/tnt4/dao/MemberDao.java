@@ -25,22 +25,7 @@ public class MemberDao extends Dao {
 		}
 		return new Member(memberRow);
 	}
-	/*
-	public Member getMemberBmiIdByLoginId(String loginId) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(String.format("SELECT 'bmiId' "));
-		sb.append(String.format("FROM `member` "));
-		sb.append(String.format("WHERE loginId = '%s' ", loginId));
-
-		Map<String, Object> memberRow = dbConnection.selectRow(sb.toString());
-
-		if ( memberRow.isEmpty() ) {
-			return null;
-		}
-		return new Member(memberRow);
-	}
-	*/
+	
 	//DB Data에 있는 PW 가져옴
 	public Member getMemberByLoginPw(String loginPw) {
 		StringBuilder sb = new StringBuilder();

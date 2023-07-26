@@ -18,7 +18,7 @@ public class ArticleDao extends Dao {
 	private Statement statement;
 	private ResultSet resultSet;
 	private Connection connection;
-	private String url = "jdbc:mysql://localhost:3306/tnt4";
+	private String url = "jdbc:mysql://localhost:3306/sbs_proj";
 	private String userName = "root";
 	private String password = "";
 	

@@ -80,15 +80,14 @@ public class MemberController extends Controller {
 		System.out.printf("성별 : ");
 		String gender = sc.nextLine();
 		System.out.printf("키 : ");
-		int height = sc.nextInt();
-		sc.nextLine();
+		int height = Integer.parseInt(sc.nextLine());
 		System.out.printf("몸무게 : ");
-		int weight = sc.nextInt();
-		sc.nextLine();
-		int bmiId;
-		bmiId = getBmi(height, weight);
+		int weight = Integer.parseInt(sc.nextLine());
+		
+		int bmiId = MemberController.getBmi(height, weight);
 		memberService.join(loginId, loginPw, name, gender, height, weight, bmiId);
-		System.out.println("회원가입이 완료되었습니다. [%s]");
+
+		System.out.println("회원가입이 완료되었습니다.");
 		
 		// 회원가입 후 정보 유지, DB에 저장
 		Member member = memberService.getMemberByLoginId(loginId);
@@ -200,7 +199,7 @@ public class MemberController extends Controller {
 		else if(bmi <= 24.9) {
 			bmiId =3;
 		}
-		else if(bmi >= 25) {
+		else if(bmi > 24.9) {
 			bmiId =3;
 		}
 		else {

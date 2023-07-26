@@ -11,7 +11,7 @@ public class App {
 	private Session session;
 	
 	public App() {
-		DBConnection.DB_NAME = "tnt4";
+		DBConnection.DB_NAME = "sbs_proj";
 		DBConnection.DB_USER = "sbsst";
 		DBConnection.DB_PASSWORD = "sbs123414";
 		DBConnection.DB_PORT = 3306;

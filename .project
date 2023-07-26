@@ -20,11 +20,4 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>tnt4.sql</name>
-			<type>1</type>
-			<location>C:/work/초급 프로젝트/eclipse/tnt4_pro/tnt4.sql</location>
-		</link>
-	</linkedResources>
 </projectDescription>
