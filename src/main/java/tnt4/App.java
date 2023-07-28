@@ -7,9 +7,13 @@ import tnt4.controller.MemberController;
 import tnt4.controller.OperationController;
 import tnt4.controller.Session;
 import tnt4.db.DBConnection;
+import tnt4.dto.Member;
 
 public class App {
 	private Session session;
+	
+	private Member member;
+	String loginId;
 
 	public App() {
 		DBConnection.DB_NAME = "sbs_proj";
@@ -31,21 +35,20 @@ public class App {
 
 		while (true) {
 			String select = null;
-			if (session.isLogined() == false) {
+			if (!session.isLogined()) {
 				System.out.println("[월요일]");
 				System.out.println("- 부터 요요 없는 일요일 까지!");
 				System.out.println("-------명령어 모음-------");
 				System.out.println("로그인 : member login");
 				System.out.println("회원가입 : member join");
-				System.out.println("프로그램 종료:system exit");
+				System.out.println("프로그램 종료: system exit");
 				System.out.println("----------------------");
 				System.out.printf(">>> ");
 				select = Container.getScanner().nextLine();
-//				System.out.println("입력된 명령어 >>> " + select);
 
 				switch (select) {
 				case "member login":
-					MemberController.doLogin();
+					loginId = MemberController.doLogin();
 					break;
 				case "member join":
 					MemberController.doJoin();
@@ -56,9 +59,9 @@ public class App {
 				default:
 					System.out.println("다시 입력하세요");
 				}
-				// 해당 ID 없으면 다시 실행
 				continue;
 			}
+
 			System.out.println("");
 			System.out.println("");
 			System.out.println("");
@@ -95,7 +98,7 @@ public class App {
 				break;
 			}
 
-			Controller controller;
+			Controller controller = null;
 
 			// 관리자 권한 확인
 			if (session.getLoginedMember().loginId.equals("admin")) {
@@ -106,38 +109,42 @@ public class App {
 				case "notice":
 				case "QnA":
 				case "member":
-					adminController.doAction(command);
+					controller = adminController;
+					break;
+				case "member login":
+				case "member join":
+				case "member logout":
+				case "member info":
+					controller = memberController;
+					break;
+				case "select item":
+				case "notice board":
+					controller = operationController;
 					break;
 				default:
 					System.out.println("존재하지 않는 명령어입니다.");
 					continue;
 				}
-				continue;
-			}
-
-			// 관리자가 아닌 경우, 기존 컨트롤러 선택
-			switch (command) {
-			case "member login":
-			case "member join":
-				controller = memberController;
-				break;
-			case "member logout":
-			case "member info":
-			case "select item":
-			case "Notice board":
-				if (!Container.getSession().isLogined()) {
-					System.out.println("로그인 후 이용");
+			} else {
+				// 일반 사용자 모드로 진입
+				switch (command) {
+				case "member login":
+				case "member join":
+				case "member logout":
+				case "member info":
+					controller = memberController;
+					break;
+				case "select item":
+				case "notice board":
+					controller = operationController;
+					break;
+				default:
+					System.out.println("존재하지 않는 명령어입니다.");
 					continue;
 				}
-				controller = operationController;
-				break;
-			default:
-				System.out.println("존재하지 않는 명령어입니다.");
-				continue;
 			}
-
 			// 선택한 컨트롤러의 doAction 메서드 호출
-			controller.doAction(command);
+			controller.doAction(command, loginId);
 		}
 		Container.getScanner().close();
 		System.out.println("==프로그램을 종료합니다==");

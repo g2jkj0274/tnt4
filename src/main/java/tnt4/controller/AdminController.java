@@ -14,8 +14,7 @@ public class AdminController extends Controller {
 		session = Container.getSession();
 	}
 
-	public void doAction(String command) {
-		System.out.println("작동 확인");
+	public void doAction(String command, String loginId) {
 		this.command = command;
 		switch (command) {
 		case "exercise":

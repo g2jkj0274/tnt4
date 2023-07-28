@@ -17,7 +17,7 @@ public class MemberController extends Controller {
 		memberService = Container.memberService;
 	}
 	
-	public void doAction(String command) {
+	public void doAction(String command, String loginId) {
 		switch (command) {
 		case "member join":
 			doJoin();
@@ -32,7 +32,7 @@ public class MemberController extends Controller {
 			showInfo();
 			break;
 		default:
-			System.out.println("존재하지 않는 명령어 입니다.");
+			System.out.println("존재하지 않는 명령어 입니다. (member)");
 			break;
 		}
 	}
@@ -98,7 +98,7 @@ public class MemberController extends Controller {
 		System.out.printf("로그인 성공! [%s]님 환영합니다!\n", loginedMember.name);
 	}
 	
-	public static void doLogin() {
+	public static String doLogin() {
 		System.out.printf("로그인 아이디 : ");
 		String loginId = sc.nextLine();
 		System.out.printf("로그인 비번 : ");
@@ -109,15 +109,16 @@ public class MemberController extends Controller {
 		
 		if ( member == null ) {
 			System.out.println("해당 회원은 존재하지 않습니다.");
-			return;
+			return null;
 		}
 		if ( member.loginPw.equals(loginPw) == false ) {
 			System.out.println("비밀번호가 맞지 않습니다.");
-			return;
+			return null;
 		}
 		session.setLoginedMember(member);
 		Member loginedMember = session.getLoginedMember();
 		System.out.printf("로그인 성공! [%s]님 환영합니다!\n", loginedMember.name);
+		return loginedMember.loginId;
 	}
 	
 	private void doLogout() {
