@@ -10,54 +10,22 @@ import java.util.List;
 
 import tnt4.container.Container;
 import tnt4.db.DBConnection;
-import tnt4.dto.Article;
 import tnt4.dto.NoticeBoard;
 import tnt4.dto.QnABoard;
 public class ArticleDao extends Dao {
-	public List<Article> articles;
 	private DBConnection dbConnection;
 	private Statement statement;
 	private ResultSet resultSet;
 	private Connection connection;
 
 	public ArticleDao() {
-	    articles = new ArrayList<>();
 	    dbConnection = Container.getDBConnection();
-//	    connection = dbConnection.getConnection();
 	}
-// 기존 db연결 방법, 오류 시 우선 이걸로 실행 해 주세요.
-	/*
-	public ArticleDao() {
-		articles = new ArrayList<>();
-		try {
-	//			connection = DriverManager.getConnection(url, userName, password);
-			statement = connection.createStatement();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	*/
-//test용, 기본 틀, [삭제 X]
-	/*
-	public String getExerciseList(String selectPlace, String selectExercise) {
-		try {
-			resultSet = statement.executeQuery("SELECT `name` FROM `exercise`\r\n"
-					+ "WHERE location = '헬스장' AND kind = '무산소';");
-			resultSet.next();
-			String answer = resultSet.getString("name");
-			return answer;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return "실패";
-	}
-	*/
-	
+
 	// 운동 리스트 가져옴 (selectPlace : 헴스장/홈트, selectExercise : 유산소/무산소)
 	public List<String> getExerciseList(String selectPlace, String selectExercise) {
 		List<String> exerciseList = new ArrayList<>();
-
+		
 		try {
 			String query = "SELECT `name` FROM `exercise` WHERE location = ? AND kind = ?";
 			// Statement 클래스보다 기능이 향상된 클래스
@@ -135,6 +103,9 @@ public class ArticleDao extends Dao {
 	            String adminAnswerText = resultSet.getString("adminAnswerText");
 	            QnABoard announcement = new QnABoard(id, userQuestionName, userQuestionText, adminAnswerName, adminAnswerText);
 	            QnABoardList.add(announcement);
+	            
+	            // 로그 출력
+	            System.out.println("Loaded QnABoard: " + announcement.toString());
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();

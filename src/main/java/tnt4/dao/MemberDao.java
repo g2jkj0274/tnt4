@@ -103,7 +103,6 @@ public class MemberDao extends Dao {
 				member.bmiId, member.name, member.gender, member.height, member.weight));
 		sb.append(String.format("WHERE loginId='%s' ",member.loginId));
 
-
 		dbConnection.insert(sb.toString());
 		System.out.println("회원 정보가 수정되었습니다!");
 	}

@@ -30,15 +30,22 @@ public class App {
 		while(true) {
 			String select = null;
 			if (session.isLogined() == false) {
-				System.out.printf("로그인:1 - 회원가입:2 - 프로그램 종료:system exit >>> ");
+				System.out.println("[월요일]");
+				System.out.println("- 부터 요요 없는 일요일 까지!");
+				System.out.println("-------명령어 모음-------");
+				System.out.println("로그인 : member login");
+				System.out.println("회원가입 : member join");
+				System.out.println("프로그램 종료:system exit");
+				System.out.println("----------------------");
+				System.out.printf(">>> ");
 				select = Container.getScanner().nextLine();
-				System.out.println("입력된 명령어 >>> " + select);
+//				System.out.println("입력된 명령어 >>> " + select);
 
 				switch (select) {
-				case "1":
+				case "member login":
 					MemberController.doLogin();
 					break;
-				case "2":
+				case "member join":
 					MemberController.doJoin();
 					break;
 				case "system exit":
@@ -54,22 +61,22 @@ public class App {
 			System.out.println("");
 			System.out.println("");
 			System.out.println("[명령어 모음]======================");
-			System.out.println("1. 운동/식단 선택 : select item");
-			System.out.println("2. 공지사항 : notice board");
-			System.out.println("3. My Page : member info");
-			System.out.println("4. 로그아웃 : member logout");
-			System.out.println("5. 프로그램 종료 : system exit");
+			System.out.println(" - 운동/식단 선택 : select item");
+			System.out.println(" - 공지사항 : notice board");
+			System.out.println(" - My Page : member info");
+			System.out.println(" - 로그아웃 : member logout");
+			System.out.println(" - 프로그램 종료 : system exit");
 			System.out.println("================================");
 			
 			if(session.getLoginedMember().loginId.equals("admin")) {
 				System.out.println("[관리자 권한 명령어 목록]=============");
-				System.out.println("공지사항 게시판 : ");
-				System.out.println("유저 관리 : ");
-				System.out.println("운동/식단 관리 : ");
+				System.out.println(" - 공지사항 게시판 : ");
+				System.out.println(" - 유저 관리 : ");
+				System.out.println(" - 운동/식단 관리 : ");
 				System.out.println("================================");
 			}
 
-			System.out.printf("명령어) ");
+			System.out.printf("명령어 >>> ");
 			String command = Container.getScanner().nextLine();
 			command = command.trim();
 			

@@ -10,17 +10,25 @@ public class QnABoard {
 	        this.userQuestionText = userQuestionText;
 	        this.adminAnswerName = adminAnswerName;
 	        this.adminAnswerText = adminAnswerText;
-	    }
+	}
 
 	public String toString() {
 		return "Q." + id + " / 제목 : " + userQuestionName;
 	}
-
+	
 	public String getUserQuestionName() {
 		return userQuestionName;
 	}
-	// 수정 필요
+	
+	public String getUserQuestionText() {
+		return userQuestionText;
+	}
+	
+	public String getAdminAnswerName() {
+		return adminAnswerName;
+	}
+	
 	public String getAdminAnswerText() {
-		return null;
+		return adminAnswerText;
 	}
 }

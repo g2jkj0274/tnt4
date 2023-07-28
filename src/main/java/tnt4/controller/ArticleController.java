@@ -55,102 +55,109 @@ public class ArticleController extends Controller {
 			}
 		}
 	}
-	
-	// 공지사항 및 QnA 게시판 조회
+
 	private void showAnnouncement() {
-	    // 공지사항 목록 가져온 후 출력
-	    System.out.println("공지사항 ===============");
-	    List<NoticeBoard> noticeBoardList = articleService.getNoticeBoard();
-	    
-	    int index = 1;
-	    for (NoticeBoard noticeBoard : noticeBoardList) {
-	        System.out.println(index + ". " + noticeBoard.getName());
-	        index++;
-	    }
-	    System.out.println("======================");
-	    
-	    // 가독성 때문에 한 줄 띄움
-	    System.out.println("");
-	    
-	    // QnA 목록 가져온 후 출력
-	    System.out.println("QnA===================");
-	    List<QnABoard> QnABoardList = articleService.getQnABoard();
-	    
-	    index = 1;
-	    for (QnABoard QnABoard : QnABoardList) {
-	        System.out.println(index + ". " + QnABoard.getUserQuestionName());
-	        index++;
-	    }
-	    
-	    System.out.println("======================");
-	    
-	    System.out.println("- - -");
-	    
-	    System.out.println("공지사항 보기 : board 숫자");
-	    System.out.println("QnA 보기 : QnA 숫자");
-	    System.out.println("메인으로 돌아가기 : 1");
-	    // 1이 아니면 입력할 때 까지 while문으로 반복
-	    // 입력에 따른 처리
-	    while(true) {
-	        String select = sc.nextLine();
-	        try {
-	            if (select.equals("1")) {
-	                // 돌아가기
-	                break;
-	            }
-	            // 공지사항 선택 후 내용 보기
-	            else if (select.startsWith("board")) {
-	                // 공지사항 상세보기
-	                int selectedId = Integer.parseInt(select.substring(6));
-	                if (selectedId > 0 && selectedId <= noticeBoardList.size()) {
-	                    NoticeBoard selectedNotice = noticeBoardList.get(selectedId - 1);
-	                    System.out.println("제목 : " + selectedNotice.getName());
-	                    System.out.println("내용 : " + selectedNotice.getDetail());
-	                    System.out.println("======================");
-	                    System.out.println("돌아가기 : 1");
-	                } 
-	                else {
-	                    System.out.println("해당하는 공지사항이 없습니다.");
-	                }
-	            }
-	            // QnA 선택 후 내용 보기
-	            else if (select.startsWith("QnA")) {
-	                // QnA 상세보기
-	                int selectedId = Integer.parseInt(select.substring(3));
-	                if (selectedId > 0 && selectedId < QnABoardList.size()) {
-	                    QnABoard selectedQnA = QnABoardList.get(selectedId - 1);
-	                    System.out.println("질문: " + selectedQnA.getUserQuestionName());
-	                    System.out.println("답변: " + selectedQnA.getAdminAnswerText());
-	                    System.out.println("======================");
-	                    System.out.println("돌아가기 : 1");
-	                } 
-	                else {
-	                    System.out.println("해당하는 QnA가 없습니다.");
-	                }
-	            } 
-	            else {
-	                System.out.println("잘못된 입력입니다. 다시 입력하세요.");
-	            }
-	        } 
-	        catch (NumberFormatException e) {
-	            System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
-	        }
-	    }
+		while (true) {
+			System.out.println("공지사항 ===============");
+			List<NoticeBoard> noticeBoardList = articleService.getNoticeBoard();
+
+			int index = 1;
+			for (NoticeBoard noticeBoard : noticeBoardList) {
+				System.out.println(index + ". " + noticeBoard.getName());
+				index++;
+			}
+			System.out.println("======================");
+
+			// 가독성 때문에 한 줄 띄움
+			System.out.println("");
+
+			System.out.println("QnA===================");
+			List<QnABoard> QnABoardList = articleService.getQnABoard();
+
+			index = 1;
+			for (QnABoard QnABoard : QnABoardList) {
+				System.out.println(index + ". " + QnABoard.getUserQuestionName());
+				index++;
+			}
+
+			System.out.println("======================");
+
+			System.out.println("공지사항 보기 : board 숫자");
+			System.out.println("QnA 보기 : QnA 숫자");
+			System.out.println("메인으로 돌아가기 : 1");
+
+			System.out.printf(">>> ");
+			String userInput = sc.nextLine();
+
+			if (userInput.equals("1")) {
+				// 돌아가기
+				break;
+			} else if (userInput.startsWith("board") && userInput.length() > 6) {
+				// "board" 다음에 숫자가 오는지 확인
+				String selectedIdStr = userInput.substring(6).trim();
+				// 숫자 부분이 비어있는지 확인
+				if (selectedIdStr.isEmpty()) {
+					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+					continue; // 루프의 처음으로 돌아가서 유효한 입력을 받도록 함
+				}
+				try {
+					int selectedId = Integer.parseInt(selectedIdStr);
+					selectedId--;
+					if (selectedId >= 0 && selectedId < noticeBoardList.size()) {
+						NoticeBoard selectedNotice = noticeBoardList.get(selectedId);
+						System.out.println("======================");
+						System.out.println("제목 : " + selectedNotice.getName());
+						System.out.println("내용 : " + selectedNotice.getDetail());
+						System.out.println("======================");
+					} else {
+						System.out.println("해당하는 공지사항이 없습니다.");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+				}
+			} else if (userInput.startsWith("QnA") && userInput.length() > 3) {
+				// "QnA" 다음에 숫자가 오는지 확인
+				String selectedIdStr = userInput.substring(3).trim();
+				// 숫자 부분이 비어있는지 확인
+				if (selectedIdStr.isEmpty()) {
+					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+					continue; // 루프의 처음으로 돌아가서 유효한 입력을 받도록 함
+				}
+				try {
+					int selectedId = Integer.parseInt(selectedIdStr);
+					selectedId--;
+					if (selectedId >= 0 && selectedId < QnABoardList.size()) {
+						QnABoard selectedQnA = QnABoardList.get(selectedId);
+						System.out.println("======================");
+						System.out.println("질문 : " + selectedQnA.getUserQuestionName());
+						System.out.println("질문내용 : " + selectedQnA.getUserQuestionText());
+						System.out.println("답변 : " + selectedQnA.getAdminAnswerName());
+						System.out.println("답변내용 : " + selectedQnA.getAdminAnswerText());
+						System.out.println("======================");
+					} else {
+						System.out.println("해당하는 QnA가 없습니다.");
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+				}
+			} else {
+				System.out.println("잘못된 입력입니다. 다시 입력하세요.");
+			}
+		}
 	}
 
 	// 운동/ 식단 선택
 	private void showSelect() {
-		System.out.println("운동 : 1 - 식단 : 2");
+		System.out.println("운동 / 식단");
+		System.out.printf(">>> ");
 		String select =sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + select);
 		
 		switch(select) {
-		// 1번이면 운동
-		case "1":
+		case "운동":
 			showSelectPlace();
 			break;
-		// 2번이면 식단
-		case "2":
+		case "식단":
 			showSelectEat();
 			break;
 		// 그 외의 입력시 다시 실행
@@ -159,12 +166,14 @@ public class ArticleController extends Controller {
             showSelect(); // 재귀 호출하여 메서드를 다시 실행
             break;
 		}
-		
+		System.out.println("=====");
 	}
 	
 	// 헬스장/홈트 선택
 	private void showSelectPlace() {
-		System.out.println("헬스장 / 홈트 : ");
+		System.out.println("어디에서 운동 하십니까?");
+		System.out.println("헬스장 / 홈트");
+		System.out.printf(">>> ");
 		String selectPlace = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + selectPlace);
 		// 헬스장 or 홈트 아니면 다시 실행
@@ -173,12 +182,15 @@ public class ArticleController extends Controller {
 			showSelectPlace(); // 재귀 호출하여 메서드를 다시 실행
 			return;
 		}
+		System.out.println("=====");
 		showSelectExercise(selectPlace);
 	}
 	
 	// 유산소/무산소 선택
 	private void showSelectExercise(String selectPlace) {
-		System.out.println("유산소 / 무산소 : ");
+		System.out.println("어떤 운동을 하시겠습니까?");
+		System.out.println("유산소 / 무산소");
+		System.out.printf(">>> ");
 		String selectExercise = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + selectExercise);
 		// 유산소 or 무산소 아니면 다시 실행
@@ -187,6 +199,7 @@ public class ArticleController extends Controller {
 			showSelectExercise(selectPlace); // 재귀 호출하여 메서드를 다시 실행
 			return;
 		}
+		System.out.println("=====");
 		// 입력한 값을 매개변수로 전달
 		showPlaceExercise(selectPlace, selectExercise);
 	}
@@ -206,9 +219,11 @@ public class ArticleController extends Controller {
 	private void showSelectEat() {
 		String select = "";
 		while (true) {
-			System.out.println("다이어트 : 1 - 벌크업 : 2");
+			System.out.println("어떤 식단을 선택하시겠습니까?");
+			System.out.println("다이어트 / 벌크업");
+			System.out.printf(">>> ");
 			select = sc.nextLine();
-			if (!select.equals("1") && !select.equals("2")) {
+			if (!select.equals("다이어트") && !select.equals("벌크업")) {
 				System.out.println("올바른 명령어를 입력해주세요");
 				continue;
 			}
@@ -216,15 +231,14 @@ public class ArticleController extends Controller {
 			break;
 		}
 		switch (select) {
-		case "1":
-			System.out.println("1번");
+		case "다이어트":
 			showDiet();
 			break;
-		case "2":
-			System.out.println("2번");
+		case "식단":
 			showBulk();
 			break;
 		}
+		System.out.println("=====");
 	}
 	
 	// 식단 리스트 가져옴

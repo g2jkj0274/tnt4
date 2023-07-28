@@ -95,7 +95,7 @@ public class MemberController extends Controller {
 		session.setLoginedMember(member);
 		Member loginedMember = session.getLoginedMember();
 
-		System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedMember.name);
+		System.out.printf("로그인 성공! [%s]님 환영합니다!\n", loginedMember.name);
 	}
 	
 	public static void doLogin() {
@@ -117,7 +117,7 @@ public class MemberController extends Controller {
 		}
 		session.setLoginedMember(member);
 		Member loginedMember = session.getLoginedMember();
-		System.out.printf("로그인 성공! %s님 환영합니다!\n", loginedMember.name);
+		System.out.printf("로그인 성공! [%s]님 환영합니다!\n", loginedMember.name);
 	}
 	
 	private void doLogout() {
@@ -224,7 +224,7 @@ public class MemberController extends Controller {
 		bmiId=getBmi(height,weight);
 		loginedMember.name =name; loginedMember.gender = gender; loginedMember.height=height;
 		loginedMember.weight = weight; loginedMember.bmiId=bmiId;
-		memberService.modify(gender, name, bmiId,  height, weight);
+		memberService.modify(gender, name, bmiId, height, weight);
 	}
 	
 	// bmi 공식

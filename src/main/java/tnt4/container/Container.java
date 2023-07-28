@@ -29,7 +29,6 @@ public class Container {
 		if ( sc == null ) {
 			sc = new Scanner(System.in);
 		}
-
 		return sc;
 	}
 
@@ -37,7 +36,6 @@ public class Container {
 		if ( dbConnection == null ) {
 			dbConnection = new DBConnection();
 		}
-		
 		return dbConnection;
 	}
 
@@ -45,7 +43,6 @@ public class Container {
 		if ( session == null ) {
 			session = new Session();
 		}
-		
 		return session;
 	}
 }
