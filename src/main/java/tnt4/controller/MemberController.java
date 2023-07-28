@@ -17,18 +17,18 @@ public class MemberController extends Controller {
 		memberService = Container.memberService;
 	}
 	
-	public void doAction(String command, String actionMethodName) {
-		switch ( actionMethodName ) {
-		case "join":
+	public void doAction(String command) {
+		switch (command) {
+		case "member join":
 			doJoin();
 			break;
-		case "login":
+		case "member login":
 			doLogin();
 			break;
-		case "logout":
+		case "member logout":
 			doLogout();
 			break;
-		case "info":
+		case "member info":
 			showInfo();
 			break;
 		default:

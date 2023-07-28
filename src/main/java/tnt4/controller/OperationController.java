@@ -8,51 +8,34 @@ import tnt4.dto.NoticeBoard;
 import tnt4.dto.QnABoard;
 import tnt4.service.ArticleService;
 
-public class ArticleController extends Controller {
+public class OperationController extends Controller {
 	private Scanner sc;
 	private String command;
 	private Session session;
 	private ArticleService articleService;
 	
 	// 생성자 - 스캐너, 세션(현재 유저 정보), 서비스 사용 가능하게 함
-	public ArticleController() {
+	public OperationController() {
 		sc = Container.getScanner();
 		session = Container.getSession();
 		articleService = Container.articleService;
 	}
 	
-	// 입력한 명령어를 switch로 구분 
-	public void doAction(String command, String actionMethodName) {
+	public void doAction(String command) {
 		System.out.println(session.getLoginedMember().loginId);
 		this.command = command;
-		
-		// 관리자 계정이 사용 가능한 기능
-		if(session.getLoginedMember().loginId.equals("admin")) {
-			switch (actionMethodName) {
-			case "item":
-				showSelect();
-				break;
-			case "board":
-				showAnnouncement();
-				break;
-			default:
-				System.out.println("존재하지 않는 명령어 입니다.");
-				break;
-			}
-		}
-		// 일반 사용자가 사용 가능한 기능
-		else {
-			switch (actionMethodName) {
-			case "item":
-				showSelect();
-				break;
-			case "board":
-				showAnnouncement();
-				break;
-			default:
-				System.out.println("존재하지 않는 명령어 입니다.");
-				break;
-			}
+
+		// 입력한 명령어를 switch로 구분
+		switch (command) {
+		case "select item":
+			showSelect();
+			break;
+		case "notice board":
+			showAnnouncement();
+			break;
+		default:
+			System.out.println("존재하지 않는 명령어 입니다.");
+			break;
 		}
 	}
 
@@ -166,11 +149,11 @@ public class ArticleController extends Controller {
             showSelect(); // 재귀 호출하여 메서드를 다시 실행
             break;
 		}
-		System.out.println("=====");
 	}
 	
 	// 헬스장/홈트 선택
 	private void showSelectPlace() {
+		System.out.println("=====");
 		System.out.println("어디에서 운동 하십니까?");
 		System.out.println("헬스장 / 홈트");
 		System.out.printf(">>> ");
@@ -219,6 +202,7 @@ public class ArticleController extends Controller {
 	private void showSelectEat() {
 		String select = "";
 		while (true) {
+			System.out.println("=====");
 			System.out.println("어떤 식단을 선택하시겠습니까?");
 			System.out.println("다이어트 / 벌크업");
 			System.out.printf(">>> ");
