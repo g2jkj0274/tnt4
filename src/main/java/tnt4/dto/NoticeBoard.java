@@ -11,7 +11,12 @@ public class NoticeBoard {
         this.detail = detail;
     }
     
-    public String getName() {
+    public NoticeBoard(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+	public String getName() {
 		return name;
 	}
     
@@ -26,4 +31,8 @@ public class NoticeBoard {
     public String toString() {
         return "No." + id + " / 제목 : " + name + "\n" + detail;
     }
+
+	public int getId() {
+		return id;
+	}
 }

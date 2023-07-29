@@ -11,6 +11,11 @@ public class QnABoard {
 	        this.adminAnswerName = adminAnswerName;
 	        this.adminAnswerText = adminAnswerText;
 	}
+	
+	public QnABoard(int id, String userQuestionName) {
+        this.id = id;
+        this.userQuestionName = userQuestionName;
+    }
 
 	public String toString() {
 		return "Q." + id + " / 제목 : " + userQuestionName;
@@ -30,5 +35,9 @@ public class QnABoard {
 	
 	public String getAdminAnswerText() {
 		return adminAnswerText;
+	}
+
+	public int getId() {
+		return id;
 	}
 }

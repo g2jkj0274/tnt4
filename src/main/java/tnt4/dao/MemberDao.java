@@ -78,13 +78,10 @@ public class MemberDao extends Dao {
 	}
 
 	public void modify(Member member) {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(String.format("UPDATE `member` "));
-		sb.append(String.format("SET `bmiId`='%d', `name`='%s', `gender`='%s', `height`='%d', `weight`='%d' ",
-				member.bmiId, member.name, member.gender, member.height, member.weight));
-		sb.append(String.format("WHERE `id`='%s'", member.id));
-		dbConnection.insert(sb.toString());
+		String query = String.format("UPDATE `member` SET `bmiId`='%d', `name`='%s', `gender`='%s', `height`='%d', `weight`='%d' WHERE `id`='%s'",
+                member.bmiId, member.name, member.gender, member.height, member.weight, member.id);
+		
+		dbConnection.insert(query);
 		System.out.println("회원 정보가 수정되었습니다!");
 	}
 

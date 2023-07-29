@@ -194,7 +194,7 @@ public class OperationController extends Controller {
 		System.out.println("추천 하고 싶은 운동이 있다면 그 운동의 번호를 입력해주세요.");
 		System.out.println(">>> ");
 		int id = sc.nextInt();
-		operationService.likeExercise(id);
+		operationService.likeExercise(id,loginId,"exercise");  // 중복 추천 막기 위해 아이디랑 운동 인자로 넣기 
 		System.out.println("해당 운동이 추천되었습니다!");
 		
 		showPlaceExercise(selectPlace, selectExercise, loginId);
@@ -219,7 +219,7 @@ public class OperationController extends Controller {
 	
 	// 운동 리스트 출력
 	private void printExerciseList(List<String> exerciseList) {
-	    for (int i = 0; i < exerciseList.size(); i += 4) {
+		for (int i = 0; i <12; i += 4) { //3개까지만 나오게하려고 12를 적음
 	        for (int j = 0; j < 4; j++) {
 	            int index = i + j;
 	            if (index < exerciseList.size()) {
@@ -246,25 +246,28 @@ public class OperationController extends Controller {
 				continue;
 			}
 			System.out.println("입력된 명령어 >>> " + select);
+			System.out.println("------------------------------------------------------------------------");
 			break;
 		}
 		switch (select) {
 		case "다이어트":
 			// 인자값 쓴 이유 : 각 식단 리스트 불러오는 함수가 같아서 1/2로 구분 함
 			showDiet(1, loginId);
+			System.out.println("------------------------------------------------------------------------");
 			System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
 			System.out.printf(">>> ");
 			int id = sc.nextInt();
-			operationService.likeFood(id);
+			operationService.likeFood(id,loginId,"food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
 			System.out.println("추천이 완료되었습니다.");
 			break;
-		case "식단":
+		case "벌크업":
 			// 인자값 쓴 이유 : 각 식단 리스트 불러오는 함수가 같아서 1/2로 구분 함
 			showBulk(2, loginId);
+			System.out.println("------------------------------------------------------------------------");
 			System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
 			System.out.printf(">>> ");
 			int id2 = sc.nextInt();
-			operationService.likeFood(id2);
+			operationService.likeFood(id2,loginId,"food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
 			System.out.println("추천이 완료되었습니다.");
 			break;
 		}
@@ -276,7 +279,7 @@ public class OperationController extends Controller {
 		List<String> foodList = operationService.getFoodList(num, loginId);
 
 		int i = 1;
-		System.out.println("회원님 맞춤 식단");
+		System.out.println("회원님 맞춤 다이어트 식단");
 		System.out.println("번호 ||  이름  ||   추천수  || 100g 당 칼로리  || 100g 당 단백질   ");
 		for (String food : foodList) {
 

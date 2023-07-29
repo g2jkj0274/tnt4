@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class Member extends Dto {
+	public int id;
     public String loginId;
     public String loginPw;
     public String name, gender;
@@ -40,5 +41,10 @@ public class Member extends Dto {
 		this.height = height;
 		this.weight = weight;
 		this.bmiId = bmiId;
+	}
+	
+	public Member(int id, String name) {
+		this.id = id;
+		this.name = name;
 	}
 }

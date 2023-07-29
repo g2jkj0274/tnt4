@@ -59,8 +59,14 @@ public class OperationDao extends Dao {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				String name = resultSet.getString("name");
-				exerciseList.add(name);
+				String name1 = resultSet.getString("id");
+				String name2 = resultSet.getString("name");
+				String name3 = resultSet.getString("like");
+				String name4 = resultSet.getString("link");
+				exerciseList.add(name1);
+				exerciseList.add(name2);
+				exerciseList.add(name3);
+				exerciseList.add(name4);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -70,9 +76,11 @@ public class OperationDao extends Dao {
 
 	public List<String> getExerciseList2(String selectPlace, String selectExercise, String loginId) {
 		List<String> exerciseList = new ArrayList<>();
+
 		memberService = Container.memberService;
 		member = memberService.getMemberByLoginId(loginId);
 		System.out.println(member.bmiId);
+
 		try {
 			String query = "SELECT `name`,`id`,`like`,`link` FROM `exercise` WHERE location = ? AND kind = ? ORDER BY `like` DESC";
 			// Statement 클래스보다 기능이 향상된 클래스
@@ -85,12 +93,12 @@ public class OperationDao extends Dao {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				String name = resultSet.getString("name");
-				String name2 = resultSet.getString("id");
+				String name1 = resultSet.getString("id");
+				String name2 = resultSet.getString("name");
 				String name3 = resultSet.getString("like");
 				String name4 = resultSet.getString("link");
+				exerciseList.add(name1);
 				exerciseList.add(name2);
-				exerciseList.add(name);
 				exerciseList.add(name3);
 				exerciseList.add(name4);
 			}
@@ -110,7 +118,7 @@ public class OperationDao extends Dao {
 			num = 1; // bmiId 가 1인 사람 (저체중)
 		}
 		try {
-			String query = "SELECT `id`,`name`,`like`,`kal`,`pro` FROM `food` WHERE bmiId = ? ORDER BY `like` DESC";
+			String query = "SELECT `id`,`name`,`like`,`kal`,`pro` FROM `food` WHERE `bmiId` = ? ORDER BY `like` DESC";
 
 			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
 			preparedStatement.setLong(1, num);
@@ -186,14 +194,20 @@ public class OperationDao extends Dao {
 		return QnABoardList;
 	}
 
-	public void upLikeExercise(int id) {
+	public void upLikeExercise(int id, String loginId, String what) {
 		exercise = getExerciseById(id); // 운동의 추천수가 필요해서 불러와야함
-		Member loginedMember = session.getLoginedMember();
+		member = memberService.getMemberByLoginId(loginId);// 반복추천 막기위해
+		int num = getlogByName(member.name, exercise.name, what);
+		if (num == 1) {// 추천을 할떄에는 추천 로그 db는 새로 추가되야함, num이 1이라는 것은 추천 로그에 없다는걸 의미, 추천한적이없다
+			setAddlog(member.name, exercise.name, what);
+		} else if (num == -1) { // 추천이 취소될떄 추천 로그 db 에는 삭제되야함
+			setDeletelog(member.name, exercise.name, what);
+		}
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("UPDATE `exercise` "));
-		sb.append(String.format("SET `like` = '%d' ", exercise.like + 1));
+		sb.append(String.format("SET `like` = '%d' ", exercise.like + num));// // num 이 1이면 추천 더하기 ,num이 -1 추천 취소
 		sb.append(String.format("WHERE `id` = '%d' ", id));
 
 		dbConnection.insert(sb.toString());
@@ -212,13 +226,23 @@ public class OperationDao extends Dao {
 		return new Exercise(row);
 	}
 
-	public void upLikeFood(int id) {
+	public void upLikeFood(int id, String loginId, String what) {
 		food = getFoodById(id);
+
+		memberService = Container.memberService;
+		member = memberService.getMemberByLoginId(loginId); // 반복추천 막기위해
+
+		int num = getlogByName(member.name, food.name, what); // 이부분도 위에 운동 추천 함수랑 인자 이름만 바꾸고 동일
+		if (num == 1) { // 추천을 할떄에는 추천 로그 db는 새로 추가되야함
+			setAddlog(member.name, food.name, what);
+		} else if (num == -1) { // 추천이 취소될떄 추천 로그 db 에는 삭제되야함
+			setDeletelog(member.name, food.name, what);
+		}
 
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("UPDATE `food` "));
-		sb.append(String.format("SET `like` = '%d' ", food.like + 1));
+		sb.append(String.format("SET `like` = '%d' ", food.like + num)); // num 이 1이면 추천 더하기 ,num이 -1 추천 취소
 		sb.append(String.format("WHERE `id` = '%d' ", id));
 
 		dbConnection.insert(sb.toString());
@@ -237,5 +261,63 @@ public class OperationDao extends Dao {
 			return null;
 		}
 		return new Food(row);
+	}
+
+	//  함수 이름이 애매한데 회원이름과 추천한 항목을 받아서 그 회원이 그 항목을 추천한지 없는지 판별해주는 함수 
+	// 위에 추천 해주는 함수에서 추천을 더할껀지 뺼껀지 구별하기 위해서 int 로 리턴값을받음
+	public int getlogByName(String memberName, String likeName, String what) { //
+		List<String> logList = new ArrayList<>();
+
+		try {
+			String query = "SELECT `userName` FROM `likeLog` WHERE userName = ? AND likeName = ? ";
+
+			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, memberName);
+			preparedStatement.setString(2, likeName);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+
+				String name1 = resultSet.getString("userName");
+
+				logList.add(name1);
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (logList.size() > 0) {
+			System.out.println("이미 추천한적이 있습니다. 추천이 취소됩니다.");
+			return -1;
+		} else if (logList.size() == 0) {
+			System.out.println("");
+			return 1;
+		}
+
+		return 20; // 오류 방지
+
+	}
+
+	// 추천 기록이 없다면 추천 기록에 추가해주는 함수
+	public void setAddlog(String memberName, String likeName, String what) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("INSERT INTO `likeLog` "));
+		sb.append(String.format("(userName, likeName, likeWhat) "));
+		sb.append(String.format("VALUES ('%s','%s','%s') ", memberName, likeName, what));
+
+		dbConnection.insert(sb.toString());
+	}
+
+	//// 추천 기록이 이미 있다면 추천 기록에서 제거해주는 함수
+	public void setDeletelog(String memberName, String likeName, String what) {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(String.format("DELETE FROM `likeLog` "));
+		sb.append(String.format("WHERE userName='%s' AND likeName ='%s'AND likeWhat = '%s' ", memberName, likeName,
+				what));
+		dbConnection.insert(sb.toString());
+
 	}
 }

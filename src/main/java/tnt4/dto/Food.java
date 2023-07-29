@@ -14,7 +14,12 @@ public class Food extends Dto{
 		this.kal = kal;
 		this.pro = pro;
 	}
-
+	
+	public Food(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+	
 	public Food(Map<String, Object> row) {
 		    super(row);
 	        this.id = (int) row.get("id");
@@ -23,5 +28,14 @@ public class Food extends Dto{
 	        this.name= (String) row.get("name");
 	        this.kal= (int) row.get("kal");
 	        this.pro = (int) row.get("pro");
+	}
+	
+	@Override
+    public String toString() {
+        return "식단 ID : " + id + ", 이름 : " + name;
+    }
+
+	public String getName() {
+		return name;
 	}
 }

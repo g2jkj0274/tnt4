@@ -17,6 +17,11 @@ public class Exercise extends Dto{
 		this.kind = kind;
 		this.link = link;
 	}
+	
+	public Exercise(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
 	public Exercise(Map<String, Object> row) {
 		    super(row);

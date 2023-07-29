@@ -77,7 +77,7 @@ public class App {
 				System.out.println("");
 				System.out.println("[관리자 권한 명령어 목록]=============");
 				System.out.println(" - 운동 관리 : exercise");
-				System.out.println(" - 식단 관리 : eat");
+				System.out.println(" - 식단 관리 : food");
 				System.out.println(" - 공지사항 관리 : notice");
 				System.out.println(" - QnA 관리 : QnA");
 				System.out.println(" - 유저 관리 : member");
@@ -105,7 +105,7 @@ public class App {
 				// 관리자 모드로 진입
 				switch (command) {
 				case "exercise":
-				case "eat":
+				case "food":
 				case "notice":
 				case "QnA":
 				case "member":
