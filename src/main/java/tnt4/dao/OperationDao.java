@@ -59,14 +59,14 @@ public class OperationDao extends Dao {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				String name1 = resultSet.getString("id");
-				String name2 = resultSet.getString("name");
-				String name3 = resultSet.getString("like");
-				String name4 = resultSet.getString("link");
-				exerciseList.add(name1);
-				exerciseList.add(name2);
-				exerciseList.add(name3);
-				exerciseList.add(name4);
+				String id = resultSet.getString("id");
+				String name = resultSet.getString("name");
+				String like = resultSet.getString("like");
+				String link = resultSet.getString("link");
+				exerciseList.add(id);
+				exerciseList.add(name);
+				exerciseList.add(like);
+				exerciseList.add(link);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -93,14 +93,14 @@ public class OperationDao extends Dao {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				String name1 = resultSet.getString("id");
-				String name2 = resultSet.getString("name");
-				String name3 = resultSet.getString("like");
-				String name4 = resultSet.getString("link");
-				exerciseList.add(name1);
-				exerciseList.add(name2);
-				exerciseList.add(name3);
-				exerciseList.add(name4);
+				String id = resultSet.getString("id");
+				String name = resultSet.getString("name");
+				String like = resultSet.getString("like");
+				String link = resultSet.getString("link");
+				exerciseList.add(id);
+				exerciseList.add(name);
+				exerciseList.add(like);
+				exerciseList.add(link);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -126,16 +126,16 @@ public class OperationDao extends Dao {
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
-				String name1 = resultSet.getString("id");
-				String name2 = resultSet.getString("name");
-				String name3 = resultSet.getString("like");
-				String name4 = resultSet.getString("kal");
-				String name5 = resultSet.getString("pro");
-				foodList.add(name1);
-				foodList.add(name2);
-				foodList.add(name3);
-				foodList.add(name4);
-				foodList.add(name5);
+				String id = resultSet.getString("id");
+				String name = resultSet.getString("name");
+				String like = resultSet.getString("like");
+				String kal = resultSet.getString("kal");
+				String pro = resultSet.getString("pro");
+				foodList.add(id);
+				foodList.add(name);
+				foodList.add(like);
+				foodList.add(kal);
+				foodList.add(pro);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -279,9 +279,9 @@ public class OperationDao extends Dao {
 
 			while (resultSet.next()) {
 
-				String name1 = resultSet.getString("userName");
+				String userName = resultSet.getString("userName");
 
-				logList.add(name1);
+				logList.add(userName);
 
 			}
 		} catch (SQLException e) {
@@ -315,9 +315,8 @@ public class OperationDao extends Dao {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("DELETE FROM `likeLog` "));
-		sb.append(String.format("WHERE userName='%s' AND likeName ='%s'AND likeWhat = '%s' ", memberName, likeName,
-				what));
+		sb.append(String.format("WHERE userName='%s' AND likeName ='%s'AND likeWhat = '%s' ", 
+				memberName, likeName, what));
 		dbConnection.insert(sb.toString());
-
 	}
 }
