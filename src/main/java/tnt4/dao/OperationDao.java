@@ -148,14 +148,14 @@ public class OperationDao extends Dao {
 		List<NoticeBoard> noticeBoardList = new ArrayList<>();
 
 		try {
-			String query = "SELECT `id`, `name`, `detail` FROM `noticeBoard`";
+			String query = "SELECT `id`, `title`, `detail` FROM `noticeBoard`";
 			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
+				String name = resultSet.getString("title");
 				String detail = resultSet.getString("detail");
 				NoticeBoard announcement = new NoticeBoard(id, name, detail);
 				noticeBoardList.add(announcement);
@@ -184,9 +184,6 @@ public class OperationDao extends Dao {
 				QnABoard announcement = new QnABoard(id, userQuestionName, userQuestionText, adminAnswerName,
 						adminAnswerText);
 				QnABoardList.add(announcement);
-
-				// 로그 출력
-				System.out.println("Loaded QnABoard: " + announcement.toString());
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -318,5 +315,24 @@ public class OperationDao extends Dao {
 		sb.append(String.format("WHERE userName='%s' AND likeName ='%s'AND likeWhat = '%s' ", 
 				memberName, likeName, what));
 		dbConnection.insert(sb.toString());
+	}
+
+	public void userWriteQnA(String userWriteQnAName, String userWriteQnAText) {
+	    try {
+	        String query = "INSERT INTO `qna` (`userQuestionName`, `userQuestionText`) VALUES (?, ?)";
+	        PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
+	        preparedStatement.setString(1, userWriteQnAName);
+	        preparedStatement.setString(2, userWriteQnAText);
+
+	        preparedStatement.executeUpdate();
+
+	        System.out.println("--------------------");
+	        System.out.println("유저의 QnA가 성공적으로 등록되었습니다.");
+	        System.out.println("[입력한 값]");
+	        System.out.println(" - 제목 : " + userWriteQnAName);
+	        System.out.println(" - 내용 : " + userWriteQnAText);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 }

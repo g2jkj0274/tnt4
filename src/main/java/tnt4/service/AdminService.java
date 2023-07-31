@@ -52,12 +52,19 @@ public class AdminService {
 	}
 	
 	// 공지사항 쓰기
-	public void writeAdminNotice(String writeNoticeName, String writeNoticeDetail) {
-		adminDao.writeAdminNotice(writeNoticeName, writeNoticeDetail);
+	public void writeAdminNotice(String writeNoticeTitle, String writeNoticeDetail) {
+		adminDao.writeAdminNotice(writeNoticeTitle, writeNoticeDetail);
 	}
 	
-	public void modifyAdminExercise(int itemId, String modifyName, String modifyLocation, String modifyKind, String modifyLink) {
-		adminDao.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink);
+	// QnA 쓰기
+	public void writeAdminQnA(String writeUserQuestionName, String writeUserQuestionText,
+			  String writeAdminAnswerName, String writeAdminAnswerText) {
+		adminDao.writeAdminQnA(writeUserQuestionName, writeUserQuestionText, writeAdminAnswerName, writeAdminAnswerText);
+}
+	
+	public void modifyAdminExercise(int itemId, String modifyName, String modifyLocation, 
+									String modifyKind, String modifyLink, int modifyBmiId) {
+		adminDao.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink, modifyBmiId);
 	}
 
 	public void deleteAdminSelectItem(String selectList, int itemId) {

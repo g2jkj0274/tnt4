@@ -15,6 +15,8 @@ public class AdminController extends Controller {
 	private AdminService adminService;
 	private String command;
 
+	private int lastDisplayedQnAId = 0;
+
 	public AdminController() {
 		sc = Container.getScanner();
 		adminService = Container.getAdminService();
@@ -112,7 +114,7 @@ public class AdminController extends Controller {
 		List<NoticeBoard> noticeList = adminService.getAdminNoticeList();
 		System.out.println("===== 공지사항 리스트 =====");
 		for (NoticeBoard notice : noticeList) {
-			System.out.println("No." + notice.getId() + " / 제목 : " + notice.getName());
+			System.out.println("No." + notice.getId() + " / 제목 : " + notice.getTitle());
 		}
 		System.out.println("=======================");
 
@@ -121,18 +123,55 @@ public class AdminController extends Controller {
 		itemManagement(selectList);
 	}
 
-	// 관리자 - QnA 리스트 출력
+	/*
+		// 관리자 - QnA 리스트 출력
+		private void showAdminQnAList() {
+			List<QnABoard> qnaList = adminService.getAdminQnAList();
+			System.out.println("===== QnA 리스트 =====");
+			for (QnABoard qna : qnaList) {
+				System.out.println("No." + qna.getId() + " / 사용자 질문 : " + qna.getUserQuestionName());
+			}
+			System.out.println("====================");
+	
+			String selectList = "QnA";
+			// 아이템을 어떻게 할 것인지 실행
+			itemManagement(selectList);
+		}
+		*/
+
 	private void showAdminQnAList() {
+		// 가독성
+		System.out.println("");
+
 		List<QnABoard> qnaList = adminService.getAdminQnAList();
+
+		// 기존의 QnA 리스트 출력
 		System.out.println("===== QnA 리스트 =====");
 		for (QnABoard qna : qnaList) {
 			System.out.println("No." + qna.getId() + " / 사용자 질문 : " + qna.getUserQuestionName());
+		}
+		
+		// 가독성
+		System.out.println("");
+
+		// 추가된 QnA 리스트 출력
+		System.out.println("===== 추가된 QnA 리스트 =====");
+		for (QnABoard qna : qnaList) {
+			if (qna.getId() > lastDisplayedQnAId) {
+				System.out.println("No." + qna.getId() + " / 사용자 질문 : " + qna.getUserQuestionName());
+			}
 		}
 		System.out.println("====================");
 
 		String selectList = "QnA";
 		// 아이템을 어떻게 할 것인지 실행
 		itemManagement(selectList);
+
+		// 새로운 QnA가 있으면 출력한 리스트의 최대 ID 값을 갱신
+		if (!qnaList.isEmpty()) {
+			int maxId = qnaList.get(qnaList.size() - 1).getId();
+			lastDisplayedQnAId = Math.max(lastDisplayedQnAId, maxId);
+		}
 	}
 
 	// 관리자 - 멤버 리스트 출력
@@ -186,14 +225,28 @@ public class AdminController extends Controller {
 		case "exercise":
 			System.out.printf("운동명 : ");
 			String writeName = sc.nextLine();
-			System.out.printf("운동장소 : ");
-			String writePlace = sc.nextLine();
-			System.out.printf("운동종류 : ");
-			String writeExercise = sc.nextLine();
+
+			String writePlace;
+			do {
+				System.out.printf("장소 (헬스장/홈트) : ");
+				writePlace = sc.nextLine();
+			} while (!isValidExercisePlace(writePlace));
+
+			String writeExercise;
+			do {
+				System.out.printf("종류 (유산소/무산소) : ");
+				writeExercise = sc.nextLine();
+			} while (!isValidExerciseType(writeExercise));
+
 			System.out.printf("링크 : ");
 			String writeLink = sc.nextLine();
-			System.out.printf("BMI ID : ");
-			int writeBmiId = sc.nextInt();
+
+			int writeBmiId;
+			do {
+				System.out.printf("BMI ID (1, 2, 3 중 하나 입력) : ");
+				writeBmiId = sc.nextInt();
+				sc.nextLine();
+			} while (writeBmiId < 1 || writeBmiId > 3);
 			sc.nextLine();
 
 			// 데이터베이스에 아이템 추가
@@ -215,31 +268,48 @@ public class AdminController extends Controller {
 			System.out.printf("BMI ID : \n");
 			int writeFoodBmiId = sc.nextInt();
 			sc.nextLine();
-			
+
 			adminService.writeAdminFood(writeFoodName, writeFoodKal, writeFoodPro, writeFoodBmiId);
-			
+
 			System.out.println("--------------------");
 			System.out.println("[입력한 값]");
-			System.out.printf(" - 음식명 : %s / 칼로리 : %s / 프로틴 : %s / BMI ID : %d \n",
-							   writeFoodName, writeFoodKal, writeFoodPro, writeFoodBmiId);
+			System.out.printf(" - 음식명 : %s / 칼로리 : %s / 프로틴 : %s / BMI ID : %d \n", writeFoodName, writeFoodKal,
+					writeFoodPro, writeFoodBmiId);
 			System.out.println("식단 아이템 추가가 완료되었습니다.");
 			break;
 		case "notice":
 			System.out.printf("공지사항 제목 : ");
-			String writeNoticeName = sc.nextLine();
+			String writeNoticeTitle = sc.nextLine();
 			System.out.printf("공지사항 내용 : ");
 			String writeNoticeDetail = sc.nextLine();
-			
-			adminService.writeAdminNotice(writeNoticeName, writeNoticeDetail);
-			
+
+			adminService.writeAdminNotice(writeNoticeTitle, writeNoticeDetail);
+
 			System.out.println("--------------------");
 			System.out.println("[입력한 값]");
-			System.out.printf(" - 제목 : %s\n", writeNoticeName);
+			System.out.printf(" - 제목 : %s\n", writeNoticeTitle);
 			System.out.printf(" - 내용 : %s\n", writeNoticeDetail);
 			System.out.println("공지사항이 작성되었습니다.");
 		case "QnA":
+			System.out.printf("Q.제목 : ");
+			String writeUserQuestionName = sc.nextLine();
+			System.out.printf("Q.내용 : ");
+			String writeUserQuestionText = sc.nextLine();
+			System.out.printf("A.제목 : ");
+			String writeAdminAnswerName = sc.nextLine();
+			System.out.printf("A.내용 : ");
+			String writeAdminAnswerText = sc.nextLine();
+			
+			adminService.writeAdminQnA(writeUserQuestionName, writeUserQuestionText, writeAdminAnswerName, writeAdminAnswerText);
+			
+			System.out.println("--------------------");
+			System.out.println("[입력한 값]");
+			System.out.printf(" - Q.제목 : %s \n - Q.내용 : %s \n", writeUserQuestionName, writeUserQuestionText);
+			System.out.printf(" - A.제목 : %s \n - A.내용 : %s \n", writeAdminAnswerName, writeAdminAnswerText);
+			System.out.println("QnA 작성 완료");
 			break;
 		case "member":
+			
 			break;
 		default:
 			System.out.println("잘못된 목록을 선택하였습니다.");
@@ -266,21 +336,28 @@ public class AdminController extends Controller {
 
 			String modifyLocation;
 			do {
-				System.out.printf("장소 : ");
+				System.out.printf("장소 (헬스장/홈트) : ");
 				modifyLocation = sc.nextLine();
 			} while (!isValidExercisePlace(modifyLocation));
 
 			String modifyKind;
 			do {
-				System.out.printf("종류 : ");
+				System.out.printf("종류 (유산소/무산소) : ");
 				modifyKind = sc.nextLine();
 			} while (!isValidExerciseType(modifyKind));
 
 			System.out.printf("링크 : ");
 			String modifyLink = sc.nextLine();
 
+			int modifyBmiId;
+			do {
+				System.out.printf("BMI ID (1, 2, 3 중 하나 입력) : ");
+				modifyBmiId = sc.nextInt();
+				sc.nextLine();
+			} while (modifyBmiId < 1 || modifyBmiId > 3);
+
 			// 데이터베이스에 아이템 수정
-			adminService.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink);
+			adminService.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink, modifyBmiId);
 
 			System.out.println("--------------------");
 			System.out.printf("아이템 (ID: %d) 수정이 완료되었습니다.\n", itemId);
@@ -292,7 +369,6 @@ public class AdminController extends Controller {
 		case "QnA":
 			break;
 		case "member":
-			// member 아이템 수정 구현
 			break;
 		default:
 			System.out.println("잘못된 목록을 선택하였습니다.");

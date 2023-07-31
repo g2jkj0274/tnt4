@@ -111,8 +111,6 @@ public class App {
 				case "member":
 					controller = adminController;
 					break;
-				case "member login":
-				case "member join":
 				case "member logout":
 				case "member info":
 					controller = memberController;
@@ -125,11 +123,9 @@ public class App {
 					System.out.println("존재하지 않는 명령어입니다.");
 					continue;
 				}
-			} else {
+			} else if (!session.getLoginedMember().loginId.equals("admin")) {
 				// 일반 사용자 모드로 진입
 				switch (command) {
-				case "member login":
-				case "member join":
 				case "member logout":
 				case "member info":
 					controller = memberController;

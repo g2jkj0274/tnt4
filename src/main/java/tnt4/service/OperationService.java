@@ -41,4 +41,8 @@ public class OperationService {
 	public void likeFood(int id, String loginId, String what) {
 		operationDao.upLikeFood(id, loginId, what);
 	}
+
+	public void userWriteQnA(String userWriteQnAName, String userWriteQnAText) {
+		operationDao.userWriteQnA(userWriteQnAName, userWriteQnAText);
+	}
 }

@@ -71,14 +71,14 @@ public class AdminDao {
 		List<NoticeBoard> noticeList = new ArrayList<>();
 
 		try {
-			String query = "SELECT `id`, `name` FROM `noticeBoard`";
+			String query = "SELECT `id`, `title` FROM `noticeBoard`";
 			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
 
 			ResultSet resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
 				int id = resultSet.getInt("id");
-				String name = resultSet.getString("name");
+				String name = resultSet.getString("title");
 				NoticeBoard announcement = new NoticeBoard(id, name);
 				noticeList.add(announcement);
 			}
@@ -170,11 +170,11 @@ public class AdminDao {
 	}
 	
 	// 공지사항 쓰기
-	public void writeAdminNotice(String writeNoticeName, String writeNoticeDetail) {
+	public void writeAdminNotice(String writeNoticeTitle, String writeNoticeDetail) {
 	    try {
-	        String query = "INSERT INTO `noticeBoard` (`name`, `detail`, `updateDate`) VALUES (?, ?, NOW())";
+	        String query = "INSERT INTO `noticeBoard` (`title`, `detail`, `updateDate`) VALUES (?, ?, NOW())";
 	        PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
-	        preparedStatement.setString(1, writeNoticeName);
+	        preparedStatement.setString(1, writeNoticeTitle);
 	        preparedStatement.setString(2, writeNoticeDetail);
 
 	        preparedStatement.executeUpdate();
@@ -182,17 +182,37 @@ public class AdminDao {
 	        e.printStackTrace();
 	    }
 	}
-
-	public void modifyAdminExercise(int itemId, String modifyName, String modifyLocation, String modifyKind,
-			String modifyLink) {
+	
+	public void writeAdminQnA(String writeUserQuestionName, String writeUserQuestionText, 
+							  String writeAdminAnswerName, String writeAdminAnswerText) {
 		try {
-			String query = "UPDATE `exercise` SET `name` = ?, `location` = ?, `kind` = ?, `link` = ? WHERE `id` = ?";
+	        String query = "INSERT INTO `qna` (`userQuestionName`,"
+	        							   + " `userQuestionText`, "
+	        							   + "`adminAnswerName`, "
+	        							   + "`adminAnswerText`) VALUES (?, ?, ?, ?)";
+	        PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
+	        preparedStatement.setString(1, writeUserQuestionName);
+	        preparedStatement.setString(2, writeUserQuestionText);
+	        preparedStatement.setString(3, writeAdminAnswerName);
+	        preparedStatement.setString(4, writeAdminAnswerText);
+
+	        preparedStatement.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	public void modifyAdminExercise(int itemId, String modifyName, String modifyLocation,
+									String modifyKind, String modifyLink, int modifyBmiId) {
+		try {
+			String query = "UPDATE `exercise` SET `name` = ?, `location` = ?, `kind` = ?, `link` = ?, `bmiId` = ?, WHERE `id` = ?";
 			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
 			preparedStatement.setString(1, modifyName);
 			preparedStatement.setString(2, modifyLocation);
 			preparedStatement.setString(3, modifyKind);
 			preparedStatement.setString(4, modifyLink);
-			preparedStatement.setInt(5, itemId);
+			preparedStatement.setInt(5, modifyBmiId);
+			preparedStatement.setInt(6, itemId);
 
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {

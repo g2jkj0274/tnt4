@@ -2,22 +2,22 @@ package tnt4.dto;
 
 public class NoticeBoard {
 	private int id;
-    private String name;
+    private String title;
     private String detail;
 
-    public NoticeBoard(int id, String name, String detail) {
+    public NoticeBoard(int id, String title, String detail) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.detail = detail;
     }
     
-    public NoticeBoard(int id, String name) {
+    public NoticeBoard(int id, String title) {
         this.id = id;
-        this.name = name;
+        this.title = title;
     }
     
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
     
     public String getDetail() {
@@ -29,7 +29,7 @@ public class NoticeBoard {
     }
     
     public String toString() {
-        return "No." + id + " / 제목 : " + name + "\n" + detail;
+        return "No." + id + " / 제목 : " + title + "\n" + detail;
     }
 
 	public int getId() {

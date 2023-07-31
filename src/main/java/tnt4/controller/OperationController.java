@@ -13,20 +13,20 @@ public class OperationController extends Controller {
 	private String command;
 	private Session session;
 	private OperationService operationService;
-	
+
 	// 생성자 - 스캐너, 세션(현재 유저 정보), 서비스 사용 가능하게 함
 	public OperationController() {
 		sc = Container.getScanner();
 		session = Container.getSession();
 		operationService = Container.operationService;
 	}
-	
+
 	public void doAction(String command, String loginId) {
 		System.out.println(session.getLoginedMember().loginId);
 		this.command = command;
 
 		System.out.println(command);
-		
+
 		// 입력한 명령어를 switch로 구분
 		switch (command) {
 		case "select item":
@@ -48,7 +48,7 @@ public class OperationController extends Controller {
 
 			int index = 1;
 			for (NoticeBoard noticeBoard : noticeBoardList) {
-				System.out.println(index + ". " + noticeBoard.getName());
+				System.out.println(index + ". " + noticeBoard.getTitle());
 				index++;
 			}
 			System.out.println("======================");
@@ -69,6 +69,7 @@ public class OperationController extends Controller {
 
 			System.out.println("공지사항 보기 : board 숫자");
 			System.out.println("QnA 보기 : QnA 숫자");
+			System.out.println("QnA 작성 : write QnA");
 			System.out.println("메인으로 돌아가기 : 1");
 
 			System.out.printf(">>> ");
@@ -91,7 +92,7 @@ public class OperationController extends Controller {
 					if (selectedId >= 0 && selectedId < noticeBoardList.size()) {
 						NoticeBoard selectedNotice = noticeBoardList.get(selectedId);
 						System.out.println("======================");
-						System.out.println("제목 : " + selectedNotice.getName());
+						System.out.println("제목 : " + selectedNotice.getTitle());
 						System.out.println("내용 : " + selectedNotice.getDetail());
 						System.out.println("======================");
 					} else {
@@ -125,20 +126,41 @@ public class OperationController extends Controller {
 				} catch (NumberFormatException e) {
 					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
 				}
+			} else if (userInput.startsWith("write QnA")) {
+				userWriteQnA();
 			} else {
 				System.out.println("잘못된 입력입니다. 다시 입력하세요.");
 			}
 		}
+		System.out.println("--------------------");
+	}
+	
+	// QnA 작성 기능
+	private void userWriteQnA() {
+		System.out.println("");
+		System.out.println("======================");
+		System.out.printf("(질문) : ");
+		String userWriteQnAName = sc.nextLine();
+		System.out.println("(내용)");
+		System.out.printf(">>> ");
+		String userWriteQnAText = sc.nextLine();
+		
+		operationService.userWriteQnA(userWriteQnAName, userWriteQnAText);
+		
+		// 가독성 향상용 줄 바꿈
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
 	}
 
 	// 운동/ 식단 선택
 	private void showSelect(String loginId) {
 		System.out.println("운동 / 식단");
 		System.out.printf(">>> ");
-		String select =sc.nextLine();
+		String select = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + select);
-		
-		switch(select) {
+
+		switch (select) {
 		case "운동":
 			showSelectPlace(loginId);
 			break;
@@ -147,24 +169,24 @@ public class OperationController extends Controller {
 			break;
 		// 그 외의 입력시 다시 실행
 		default:
-            System.out.println("올바른 값을 입력하세요.");
-            showSelect(loginId); // 재귀 호출하여 메서드를 다시 실행
-            break;
+			System.out.println("올바른 값을 입력하세요.");
+			showSelect(loginId); // 재귀 호출하여 메서드를 다시 실행
+			break;
 		}
 	}
-	
+
 	// 헬스장/홈트 선택
 	private void showSelectPlace(String loginId) {
 		System.out.println("=====");
 		System.out.println("어디에서 운동 하십니까?");
 		System.out.println("헬스장 / 홈트");
 		System.out.printf(">>> ");
-		
+
 		String selectPlace = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + selectPlace);
-		
+
 		// 헬스장 or 홈트 아니면 다시 실행
-		if(!selectPlace.equals("헬스장") && !selectPlace.equals("홈트")) {
+		if (!selectPlace.equals("헬스장") && !selectPlace.equals("홈트")) {
 			System.out.println("올바른 장소를 입력하세요.");
 			showSelectPlace(loginId); // 재귀 호출하여 메서드를 다시 실행
 			return;
@@ -172,65 +194,65 @@ public class OperationController extends Controller {
 		System.out.println("=====");
 		showSelectExercise(selectPlace, loginId);
 	}
-	
+
 	// 유산소/무산소 선택
 	private void showSelectExercise(String selectPlace, String loginId) {
 		System.out.println("어떤 운동을 하시겠습니까?");
 		System.out.println("유산소 / 무산소");
 		System.out.printf(">>> ");
-		
+
 		String selectExercise = sc.nextLine();
 		System.out.println("입력된 명령어 >>> " + selectExercise);
-		
+
 		// 유산소 or 무산소 아니면 다시 실행
-		if(!selectExercise.equals("유산소") && !selectExercise.equals("무산소")) {
+		if (!selectExercise.equals("유산소") && !selectExercise.equals("무산소")) {
 			System.out.println("올바른 운동 종류를 입력하세요.");
 			showSelectExercise(selectPlace, loginId); // 재귀 호출하여 메서드를 다시 실행
 			return;
 		}
 		// 입력한 값을 매개변수로 전달
 		showPlaceExercise(selectPlace, selectExercise, loginId);
-		
+
 		System.out.println("추천 하고 싶은 운동이 있다면 그 운동의 번호를 입력해주세요.");
 		System.out.println(">>> ");
 		int id = sc.nextInt();
-		operationService.likeExercise(id,loginId,"exercise");  // 중복 추천 막기 위해 아이디랑 운동 인자로 넣기 
+		operationService.likeExercise(id, loginId, "exercise"); // 중복 추천 막기 위해 아이디랑 운동 인자로 넣기
 		System.out.println("해당 운동이 추천되었습니다!");
-		
+
 		showPlaceExercise(selectPlace, selectExercise, loginId);
 	}
-	
+
 	// 입력한 헬스장/홈, 유산소/무산소에 따라 DB에서 Data 가져옴
 	private void showPlaceExercise(String selectPlace, String selectExercise, String loginId) {
-	    List<String> exerciseList1 = operationService.getExerciseList(selectPlace, selectExercise, loginId);
-	    List<String> exerciseList2 = operationService.getExerciseList2(selectPlace, selectExercise, loginId);
-	    
-	    System.out.println("------------------------------------------------------------------------");
-	    System.out.println("회원들이 추천한 운동");
-	    System.out.println("번호 ||        이름         ||   추천수  ||             유튜브 링크           ");
-	    printExerciseList(exerciseList2);
-	    System.out.println("------------------------------------------------------------------------");
-	    
-	    System.out.println("회원님의 맞춤 운동");
-	    System.out.println("번호 ||        이름         ||   추천수  ||             유튜브 링크           ");
-	    printExerciseList(exerciseList1);
-	    System.out.println("------------------------------------------------------------------------");
+		List<String> exerciseList1 = operationService.getExerciseList(selectPlace, selectExercise, loginId);
+		List<String> exerciseList2 = operationService.getExerciseList2(selectPlace, selectExercise, loginId);
+
+		System.out.println("------------------------------------------------------------------------");
+		System.out.println("회원들이 추천한 운동");
+		System.out.println("번호 ||        이름         ||   추천수  ||             유튜브 링크           ");
+		printExerciseList(exerciseList2);
+		System.out.println("------------------------------------------------------------------------");
+
+		System.out.println("회원님의 맞춤 운동");
+		System.out.println("번호 ||        이름         ||   추천수  ||             유튜브 링크           ");
+		printExerciseList(exerciseList1);
+		System.out.println("------------------------------------------------------------------------");
 	}
-	
+
 	// 운동 리스트 출력
 	private void printExerciseList(List<String> exerciseList) {
-		for (int i = 0; i <12; i += 4) { //3개까지만 나오게하려고 12를 적음
-	        for (int j = 0; j < 4; j++) {
-	            int index = i + j;
-	            if (index < exerciseList.size()) {
-	                System.out.print(exerciseList.get(index));
-	                System.out.print("       ");
-	            }
-	        }
-	        System.out.println();
-	    }
+		for (int i = 0; i < 12; i += 4) { // 3개까지만 나오게하려고 12를 적음
+			for (int j = 0; j < 4; j++) {
+				int index = i + j;
+				if (index < exerciseList.size()) {
+					System.out.print(exerciseList.get(index));
+					System.out.print("       ");
+				}
+			}
+			System.out.println();
+		}
 	}
-	
+
 	// 식단 선택
 	// 다이어트 식단 - DB 식단 2, 3번, 벌크업 식단 - DB 1, 2번
 	private void showSelectEat(String loginId) {
@@ -257,7 +279,7 @@ public class OperationController extends Controller {
 			System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
 			System.out.printf(">>> ");
 			int id = sc.nextInt();
-			operationService.likeFood(id,loginId,"food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
+			operationService.likeFood(id, loginId, "food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
 			System.out.println("추천이 완료되었습니다.");
 			break;
 		case "벌크업":
@@ -267,13 +289,13 @@ public class OperationController extends Controller {
 			System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
 			System.out.printf(">>> ");
 			int id2 = sc.nextInt();
-			operationService.likeFood(id2,loginId,"food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
+			operationService.likeFood(id2, loginId, "food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
 			System.out.println("추천이 완료되었습니다.");
 			break;
 		}
 		System.out.println("=====");
 	}
-	
+
 	// 다이어트 식단 가져옴
 	private void showDiet(int num, String loginId) {
 		List<String> foodList = operationService.getFoodList(num, loginId);
@@ -295,7 +317,7 @@ public class OperationController extends Controller {
 		}
 
 	}
-	
+
 	// 벌크업 식단 가져옴
 	private void showBulk(int num, String loginId) {
 		List<String> foodList = operationService.getFoodList(num, loginId);
