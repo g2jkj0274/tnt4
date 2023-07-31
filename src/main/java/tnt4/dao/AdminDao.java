@@ -355,6 +355,26 @@ public class AdminDao {
 		}
 		return food;
 	}
+	
+	public NoticeBoard getNotice(int itemId) {
+		NoticeBoard noticeBoard = null;
+		try (Connection connection = dbConnection.getConnection()) {
+			String query = "SELECT * FROM `noticeBoard` WHERE `id` = ?";
+			PreparedStatement preparedStatement = connection.prepareStatement(query);
+			preparedStatement.setInt(1, itemId);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				String title = resultSet.getString("title");
+				String detail = resultSet.getString("detail");
+
+				noticeBoard = new NoticeBoard(itemId, title, detail);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return noticeBoard;
+	}
 
 	public QnABoard getQnA(int itemId) {
 		QnABoard qnaBoard = null;

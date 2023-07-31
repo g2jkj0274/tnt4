@@ -97,4 +97,8 @@ public class AdminService {
 	public QnABoard getQnA(int itemId) {
 		return adminDao.getQnA(itemId);
 	}
+
+	public NoticeBoard getNotice(int itemId) {
+		return adminDao.getNotice(itemId);
+	}
 }
