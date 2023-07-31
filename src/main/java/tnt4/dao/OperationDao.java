@@ -46,8 +46,9 @@ public class OperationDao extends Dao {
 		member = memberService.getMemberByLoginId(loginId);
 		System.out.println(member.bmiId);
 
+		// bmi id가 1, 3 인 사람은 bmi id 가 2인 운동도 추천 받게 하려고 아래 쿼리문 수정
 		try {
-			String query = "SELECT `name`,`id`,`like`,`link` FROM `exercise` WHERE location = ? AND kind = ? AND bmiId = ?";
+			String query = "SELECT `name`,`id`,`like`,`link` FROM `exercise` WHERE location = ? AND kind = ? AND (bmiId = ? OR bmiId =2)";
 			// Statement 클래스보다 기능이 향상된 클래스
 			// 코드의 안정성과 가독성이 높다.
 			// 인자 값으로 전달이 가능하다.
@@ -108,6 +109,35 @@ public class OperationDao extends Dao {
 		return exerciseList;
 	}
 
+	// 전체 운동 불러오기 맨앞에 로그인후 랜덤 운동 뛰울떄 피욜함
+	public List<String> getExerciseList3() {
+		List<String> exerciseList = new ArrayList<>();
+
+		try {// bmi id가 1, 3 인 사람은 bmi id 가 2인 운동도 추천 받게 하려고 아래 쿼리문 수정
+			String query = "SELECT `name`,`id`,`link` FROM `exercise`";
+			// Statement 클래스보다 기능이 향상된 클래스
+			// 코드의 안정성과 가독성이 높다.
+			// 인자 값으로 전달이 가능하다.
+			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				String id = resultSet.getString("id");
+				String name = resultSet.getString("name");
+
+				String link = resultSet.getString("link");
+				exerciseList.add(id);
+				exerciseList.add(name);
+
+				exerciseList.add(link);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return exerciseList;
+	}
+
 	// 식단 리스트
 	public List<String> getFoodList(int num, String loginId) {
 		List<String> foodList = new ArrayList<>();
@@ -118,7 +148,7 @@ public class OperationDao extends Dao {
 			num = 1; // bmiId 가 1인 사람 (저체중)
 		}
 		try {
-			String query = "SELECT `id`,`name`,`like`,`kal`,`pro` FROM `food` WHERE `bmiId` = ? ORDER BY `like` DESC";
+			String query = "SELECT `id`,`name`,`like`,`kal`,`pro` FROM `food` WHERE `bmiId` = ? or `bmiId` = 2 ORDER BY `like` DESC";
 
 			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
 			preparedStatement.setLong(1, num);
@@ -194,9 +224,9 @@ public class OperationDao extends Dao {
 	public void upLikeExercise(int id, String loginId, String what) {
 		exercise = getExerciseById(id); // 운동의 추천수가 필요해서 불러와야함
 		member = memberService.getMemberByLoginId(loginId);// 반복추천 막기위해
-		int num = getlogByName(member.name, exercise.name, what);
+		int num = getlogByName(member.name, what, exercise.name);
 		if (num == 1) {// 추천을 할떄에는 추천 로그 db는 새로 추가되야함, num이 1이라는 것은 추천 로그에 없다는걸 의미, 추천한적이없다
-			setAddlog(member.name, exercise.name, what);
+			setAddlog(member.name, exercise.name, what, exercise.link);
 		} else if (num == -1) { // 추천이 취소될떄 추천 로그 db 에는 삭제되야함
 			setDeletelog(member.name, exercise.name, what);
 		}
@@ -231,7 +261,7 @@ public class OperationDao extends Dao {
 
 		int num = getlogByName(member.name, food.name, what); // 이부분도 위에 운동 추천 함수랑 인자 이름만 바꾸고 동일
 		if (num == 1) { // 추천을 할떄에는 추천 로그 db는 새로 추가되야함
-			setAddlog(member.name, food.name, what);
+			setAddlog(member.name, food.name, what, null);
 		} else if (num == -1) { // 추천이 취소될떄 추천 로그 db 에는 삭제되야함
 			setDeletelog(member.name, food.name, what);
 		}
@@ -260,7 +290,7 @@ public class OperationDao extends Dao {
 		return new Food(row);
 	}
 
-	//  함수 이름이 애매한데 회원이름과 추천한 항목을 받아서 그 회원이 그 항목을 추천한지 없는지 판별해주는 함수 
+	// 함수 이름이 애매한데 회원이름과 추천한 항목을 받아서 그 회원이 그 항목을 추천한지 없는지 판별해주는 함수
 	// 위에 추천 해주는 함수에서 추천을 더할껀지 뺼껀지 구별하기 위해서 int 로 리턴값을받음
 	public int getlogByName(String memberName, String likeName, String what) { //
 		List<String> logList = new ArrayList<>();
@@ -285,7 +315,6 @@ public class OperationDao extends Dao {
 			e.printStackTrace();
 		}
 		if (logList.size() > 0) {
-			System.out.println("이미 추천한적이 있습니다. 추천이 취소됩니다.");
 			return -1;
 		} else if (logList.size() == 0) {
 			System.out.println("");
@@ -297,14 +326,15 @@ public class OperationDao extends Dao {
 	}
 
 	// 추천 기록이 없다면 추천 기록에 추가해주는 함수
-	public void setAddlog(String memberName, String likeName, String what) {
+	public void setAddlog(String memberName, String likeName, String what, String exerciseLink) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("INSERT INTO `likeLog` "));
-		sb.append(String.format("(userName, likeName, likeWhat) "));
-		sb.append(String.format("VALUES ('%s','%s','%s') ", memberName, likeName, what));
+		sb.append(String.format("(userName, likeName, likeWhat,link) "));
+		sb.append(String.format("VALUES ('%s','%s','%s','%s') ", memberName, likeName, what, exerciseLink));
 
 		dbConnection.insert(sb.toString());
+		System.out.println("추천 되었습니다.");
 	}
 
 	//// 추천 기록이 이미 있다면 추천 기록에서 제거해주는 함수
@@ -312,27 +342,28 @@ public class OperationDao extends Dao {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append(String.format("DELETE FROM `likeLog` "));
-		sb.append(String.format("WHERE userName='%s' AND likeName ='%s'AND likeWhat = '%s' ", 
-				memberName, likeName, what));
+		sb.append(String.format("WHERE userName='%s' AND likeName ='%s'AND likeWhat = '%s' ", memberName, likeName,
+				what));
 		dbConnection.insert(sb.toString());
+		System.out.println("이미 추천한 기록이 있어서 추천이 취소되었습니다.");
 	}
 
 	public void userWriteQnA(String userWriteQnAName, String userWriteQnAText) {
-	    try {
-	        String query = "INSERT INTO `qna` (`userQuestionName`, `userQuestionText`) VALUES (?, ?)";
-	        PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
-	        preparedStatement.setString(1, userWriteQnAName);
-	        preparedStatement.setString(2, userWriteQnAText);
+		try {
+			String query = "INSERT INTO `qna` (`userQuestionName`, `userQuestionText`) VALUES (?, ?)";
+			PreparedStatement preparedStatement = dbConnection.getConnection().prepareStatement(query);
+			preparedStatement.setString(1, userWriteQnAName);
+			preparedStatement.setString(2, userWriteQnAText);
 
-	        preparedStatement.executeUpdate();
+			preparedStatement.executeUpdate();
 
-	        System.out.println("--------------------");
-	        System.out.println("유저의 QnA가 성공적으로 등록되었습니다.");
-	        System.out.println("[입력한 값]");
-	        System.out.println(" - 제목 : " + userWriteQnAName);
-	        System.out.println(" - 내용 : " + userWriteQnAText);
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+			System.out.println("--------------------");
+			System.out.println("유저의 QnA가 성공적으로 등록되었습니다.");
+			System.out.println("[입력한 값]");
+			System.out.println(" - 제목 : " + userWriteQnAName);
+			System.out.println(" - 내용 : " + userWriteQnAText);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

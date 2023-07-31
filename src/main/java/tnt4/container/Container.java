@@ -2,6 +2,7 @@ package tnt4.container;
 
 import java.util.Scanner;
 
+import tnt4.controller.OperationController;
 import tnt4.controller.Session;
 import tnt4.dao.OperationDao;
 import tnt4.dao.AdminDao;
@@ -21,6 +22,7 @@ public class Container {
 	public static MemberService memberService;
 	public static AdminDao adminDao;
 	public static AdminService adminService;
+	public static OperationController operationController;
 
 	static {
 		operationDao = new OperationDao();
@@ -30,6 +32,8 @@ public class Container {
 		operationService = new OperationService();
 		memberService = new MemberService();
 		adminService = new AdminService();
+		
+		operationController = new OperationController ();
 	}
 
 	public static Scanner getScanner() {

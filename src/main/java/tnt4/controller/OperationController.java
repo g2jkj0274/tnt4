@@ -134,7 +134,7 @@ public class OperationController extends Controller {
 		}
 		System.out.println("--------------------");
 	}
-	
+
 	// QnA 작성 기능
 	private void userWriteQnA() {
 		System.out.println("");
@@ -144,9 +144,9 @@ public class OperationController extends Controller {
 		System.out.println("(내용)");
 		System.out.printf(">>> ");
 		String userWriteQnAText = sc.nextLine();
-		
+
 		operationService.userWriteQnA(userWriteQnAName, userWriteQnAText);
-		
+
 		// 가독성 향상용 줄 바꿈
 		System.out.println("");
 		System.out.println("");
@@ -213,13 +213,19 @@ public class OperationController extends Controller {
 		// 입력한 값을 매개변수로 전달
 		showPlaceExercise(selectPlace, selectExercise, loginId);
 
-		System.out.println("추천 하고 싶은 운동이 있다면 그 운동의 번호를 입력해주세요.");
-		System.out.println(">>> ");
-		int id = sc.nextInt();
-		operationService.likeExercise(id, loginId, "exercise"); // 중복 추천 막기 위해 아이디랑 운동 인자로 넣기
-		System.out.println("해당 운동이 추천되었습니다!");
+		while (true) {
+			System.out.println("추천 하고 싶은 운동이 있다면 그 운동의 번호를 입력해주세요.");
+			System.out.println("메인페이지로 돌아가려면 0을 입력해주세요");
+			System.out.printf(">>> ");
+			int id = sc.nextInt();
+			if (id == 0) {
+				break;
+			}
+			operationService.likeExercise(id, loginId, "exercise"); // 중복 추천 막기 위해 아이디랑 운동 인자로 넣기
 
-		showPlaceExercise(selectPlace, selectExercise, loginId);
+			showPlaceExercise(selectPlace, selectExercise, loginId);
+			continue;
+		}
 	}
 
 	// 입력한 헬스장/홈, 유산소/무산소에 따라 DB에서 Data 가져옴
@@ -228,29 +234,47 @@ public class OperationController extends Controller {
 		List<String> exerciseList2 = operationService.getExerciseList2(selectPlace, selectExercise, loginId);
 
 		System.out.println("------------------------------------------------------------------------");
-		System.out.println("회원들이 추천한 운동");
-		System.out.println("번호 ||        이름         ||   추천수  ||             유튜브 링크           ");
-		printExerciseList(exerciseList2);
+		System.out.println("회원들이 추천한 운동 TOP 3");
+		System.out.println("번호 ||               이름              ||   추천수  ||             유튜브 링크           ");
+		System.out.println("------------------------------------------------------------------------");
+		printExerciseList(exerciseList2, 12);
 		System.out.println("------------------------------------------------------------------------");
 
 		System.out.println("회원님의 맞춤 운동");
-		System.out.println("번호 ||        이름         ||   추천수  ||             유튜브 링크           ");
-		printExerciseList(exerciseList1);
+		System.out.println("번호 ||               이름              ||   추천수  ||             유튜브 링크           ");
 		System.out.println("------------------------------------------------------------------------");
+		printExerciseList(exerciseList1, exerciseList1.size());
+		System.out.println("------------------------------------------------------------------------");
+
 	}
 
-	// 운동 리스트 출력
-	private void printExerciseList(List<String> exerciseList) {
-		for (int i = 0; i < 12; i += 4) { // 3개까지만 나오게하려고 12를 적음
-			for (int j = 0; j < 4; j++) {
-				int index = i + j;
+	public void printExerciseListByRandom(List<String> exerciseList, int num1, int num2) {
+
+		int[] box = random(exerciseList.size(), num2, num1);
+
+		for (int i = 0; i < num1; i += 1) { // 3개까지만 나오게하려고
+			for (int j = 0; j < num2; j++) {
+				int index = box[i] + j;
 				if (index < exerciseList.size()) {
-					System.out.print(exerciseList.get(index));
+					System.out.printf("%2s   ||", (String) exerciseList.get(index));
 					System.out.print("       ");
 				}
 			}
 			System.out.println();
 		}
+	}
+
+	// 운동 리스트 출력
+	public void printExerciseList(List<String> exerciseList, int num) {
+
+		for (int i = 0; i < num; i += 4) { // 3개까지만 나오게하려고 12를 적음
+			for (int j = 0; j < 4; j++) {
+				int index = i + j;
+				System.out.printf("%2s ||", (String) exerciseList.get(index));
+				System.out.print("       ");
+			}
+		}
+		System.out.println();
 	}
 
 	// 식단 선택
@@ -276,22 +300,37 @@ public class OperationController extends Controller {
 			// 인자값 쓴 이유 : 각 식단 리스트 불러오는 함수가 같아서 1/2로 구분 함
 			showDiet(1, loginId);
 			System.out.println("------------------------------------------------------------------------");
-			System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
-			System.out.printf(">>> ");
-			int id = sc.nextInt();
-			operationService.likeFood(id, loginId, "food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
-			System.out.println("추천이 완료되었습니다.");
-			break;
+			while (true) {
+				System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
+				System.out.println("메인페이지로 돌아가려면 0을 입력해주세요");
+				System.out.printf(">>> ");
+				int id = sc.nextInt();
+				if (id == 0) {
+					break;
+				}
+
+				operationService.likeFood(id, loginId, "food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
+				System.out.println("추천이 완료되었습니다.");
+				showDiet(1, loginId);
+				continue;
+			}
 		case "벌크업":
 			// 인자값 쓴 이유 : 각 식단 리스트 불러오는 함수가 같아서 1/2로 구분 함
 			showBulk(2, loginId);
 			System.out.println("------------------------------------------------------------------------");
-			System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
-			System.out.printf(">>> ");
-			int id2 = sc.nextInt();
-			operationService.likeFood(id2, loginId, "food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
-			System.out.println("추천이 완료되었습니다.");
-			break;
+			while (true) {
+				System.out.println("추천하고 싶은 음식이 있다면 번호를 입력해주세요");
+				System.out.println("메인페이지로 돌아가려면 0을 입력해주세요");
+				System.out.printf(">>> ");
+				int id2 = sc.nextInt();
+				if (id2 == 0) {
+					break;
+				}
+				operationService.likeFood(id2, loginId, "food"); // 중복 추천 막기 위해 아이디랑 food 인자로 넣기
+				System.out.println("추천이 완료되었습니다.");
+				showBulk(2, loginId);
+				continue;
+			}
 		}
 		System.out.println("=====");
 	}
@@ -300,42 +339,100 @@ public class OperationController extends Controller {
 	private void showDiet(int num, String loginId) {
 		List<String> foodList = operationService.getFoodList(num, loginId);
 
-		int i = 1;
-		System.out.println("회원님 맞춤 다이어트 식단");
-		System.out.println("번호 ||  이름  ||   추천수  || 100g 당 칼로리  || 100g 당 단백질   ");
-		for (String food : foodList) {
-
-			System.out.print(food + "");
-			System.out.print("       ");
-			if (i % 5 == 0) {
-				System.out.println();
+		int[] box = random(foodList.size(), 5, 5);
+		System.out.println("회원님 맞춤 다이어트 식단 ");
+		System.out.println("번호 ||     이름    ||  추천수 || 100g당 칼로리 | 단백질    ");
+		System.out.println("---------------------------------------------------------------------");
+		for (int i = 0; i < 5; i += 1) { // 5개까지만 나오게하려고
+			for (int j = 0; j < 5; j++) {
+				int index = box[i] + j;
+				if (index < foodList.size()) {
+					System.out.printf("%2s ||", (String) foodList.get(index));
+					System.out.print("       ");
+				}
 			}
-			i++;
-			if (i == 16) {// 3줄만 나열하고 끝내게
-				break;
-			}
+			System.out.println();
 		}
-
+		System.out.println();
+		System.out.println("전체 다이어트 식단 ");
+		System.out.println("번호 ||     이름    ||  추천수 || 100g당 칼로리 | 단백질    ");
+		System.out.println("---------------------------------------------------------------------");
+		for (int i = 0; i < foodList.size(); i += 5) { // 3개까지만 나오게하려고 12를 적음
+			for (int j = 0; j < 5; j++) {
+				int index = i + j;
+				if (index < foodList.size()) {
+					System.out.printf("%2s ||", (String) foodList.get(index));
+					System.out.print("       ");
+				}
+			}
+			System.out.println();
+		}
 	}
 
 	// 벌크업 식단 가져옴
 	private void showBulk(int num, String loginId) {
 		List<String> foodList = operationService.getFoodList(num, loginId);
+		int[] box = random(foodList.size(), 5, 5);
 
-		int i = 1;
 		System.out.println("회원님 맞춤 벌크업 식단 ");
-		System.out.println("번호 ||  이름  ||   추천수  || 100g 당 칼로리  || 100g 당 단백질    ");
-		for (String food : foodList) {
-
-			System.out.print(food + "");
-			System.out.print("       ");
-			if (i % 5 == 0) {
-				System.out.println();
+		System.out.println("번호 ||       이름    ||  추천수 || 100g당 칼로리 | 단백질    ");
+		System.out.println("---------------------------------------------------------------------");
+		for (int i = 0; i < 5; i += 1) { // 5개까지만 나오게하려고
+			for (int j = 0; j < 5; j++) {
+				int index = box[i] + j;
+				if (true) {
+					System.out.printf("%2s ||", (String) foodList.get(index));
+					System.out.print("        ");
+				}
 			}
-			i++;
-			if (i == 16) {// 3줄만 나열하고 끝내게
+			System.out.println();
+		}
+		System.out.println();
+		System.out.println("전체 벌크업 식단 ");
+		System.out.println("번호 ||       이름    ||  추천수 || 100g당 칼로리 | 단백질    ");
+		System.out.println("---------------------------------------------------------------------");
+
+		for (int i = 0; i < foodList.size(); i += 5) { // 3개까지만 나오게하려고 12를 적음
+			for (int j = 0; j < 5; j++) {
+				int index = i + j;
+				if (index < foodList.size()) {
+					System.out.print(foodList.get(index));
+					System.out.print("       ");
+					System.out.printf("%2s ||", (String) foodList.get(index));
+					System.out.print("        ");
+				}
+			}
+			System.out.println();
+		}
+	}
+
+	private int[] random(int listSize, int collumNum, int printNum) {
+		int Lotto[] = new int[printNum];// 로또 번호 받을 배열, 몇개 출력할것인지
+		int Random = 0;// Random숫자 담을 변수
+
+		/***** 최종 완성된 로또 번호 입력 반복문 *****/
+		for (int i = 0; i < printNum; i++) {
+
+			/***** 로또 번호 생성 반복문 *****/
+			w1: while (true) {
+				Random = (int) (Math.random() * listSize); // 하단 추가설명 1번
+
+				if (Random == 0 || Random % collumNum != 0) { // 운동은 4개의 항목 출력
+					// 식단은 5개의 항목출력
+					continue;// 영이 나올 경우
+				}
+				for (int j = 0; j < printNum; j++) {
+					if (Random == Lotto[j]) {
+
+						continue w1;
+					} // 같은 숫자일 경우
+				}
+				/**** 모든 조건 만족했다면 ****/
 				break;
 			}
+			// ****모든 검사를 마친 로또번호에 집어 넣자****//
+			Lotto[i] = Random;
 		}
+		return Lotto;
 	}
 }

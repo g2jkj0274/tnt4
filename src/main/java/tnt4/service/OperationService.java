@@ -18,6 +18,10 @@ public class OperationService {
 		return operationDao.getExerciseList(selectPlace, selectExercise, loginId);
 	}
 
+	public List<String> getExerciseList() {
+		return operationDao.getExerciseList3();
+	}
+
 	public List<String> getExerciseList2(String selectPlace, String selectExercise, String loginId) {
 		return operationDao.getExerciseList2(selectPlace, selectExercise, loginId);
 	}

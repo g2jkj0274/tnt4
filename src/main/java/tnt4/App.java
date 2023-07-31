@@ -1,5 +1,7 @@
 package tnt4;
 
+import java.util.List;
+
 import tnt4.container.Container;
 import tnt4.controller.AdminController;
 import tnt4.controller.Controller;
@@ -7,12 +9,15 @@ import tnt4.controller.MemberController;
 import tnt4.controller.OperationController;
 import tnt4.controller.Session;
 import tnt4.db.DBConnection;
+import tnt4.service.OperationService;
 
 public class App {
 	private Session session;
 	
 	String loginId;
-
+	
+	OperationService operationService;
+	
 	public App() {
 		DBConnection.DB_NAME = "sbs_proj";
 		DBConnection.DB_USER = "sbsst";
@@ -22,6 +27,8 @@ public class App {
 		session = Container.getSession();
 
 		Container.getDBConnection().connect();
+		
+		operationService = Container.operationService;
 	}
 
 	public void start() {
@@ -62,6 +69,12 @@ public class App {
 
 			System.out.println("");
 			System.out.println("");
+			System.out.println("");
+			List<String> exerciseList1 = operationService.getExerciseList();
+			System.out.println("===========랜덤 운동 Tip=============");
+			System.out.println("번호  ||                 이름               ||                  운동 영상 링크                       ||");
+			System.out.println("----------------------------------------------------------------------------------------------------------");
+			operationController.printExerciseListByRandom(exerciseList1,1,3);
 			System.out.println("");
 			System.out.println("[명령어 모음]======================");
 			System.out.println(" - 운동 / 식단 선택 : select item");
