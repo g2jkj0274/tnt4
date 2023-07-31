@@ -4,6 +4,7 @@ import java.util.List;
 
 import tnt4.container.Container;
 import tnt4.dao.AdminDao;
+import tnt4.dto.Exercise;
 import tnt4.dto.Food;
 import tnt4.dto.Member;
 import tnt4.dto.NoticeBoard;
@@ -63,11 +64,37 @@ public class AdminService {
 }
 	
 	public void modifyAdminExercise(int itemId, String modifyName, String modifyLocation, 
-									String modifyKind, String modifyLink, int modifyBmiId) {
-		adminDao.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink, modifyBmiId);
+									String modifyKind, String modifyLink, int modifyLike, int modifyBmiId) {
+		adminDao.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink, modifyLike, modifyBmiId);
+	}
+	
+	public void modifyAdminFood(int itemId, String modifyFoodName, int modifyFoodKal, 
+								int modifyFoodPro, int modifyFoodLike, int modifyFoodBmiId) {
+		adminDao.modifyAdminFood(itemId, modifyFoodName, modifyFoodKal, modifyFoodPro, modifyFoodLike, modifyFoodBmiId);
+	}
+	
+	public void modifyAdminNotice(int itemId, String modifyTitle, String modifyDetail) {
+		adminDao.modifyAdminNotice(itemId, modifyTitle, modifyDetail);
+	}
+	
+	public void modifyAdminQnA(int itemId, String userQuestionName, String userQuestionText,
+							   String modifyAdminAnswerName, String modifyAdminAnswerText) {
+		adminDao.modifyAdminQnA(itemId, userQuestionName, userQuestionText, modifyAdminAnswerName, modifyAdminAnswerText);
 	}
 
 	public void deleteAdminSelectItem(String selectList, int itemId) {
 		adminDao.deleteAdminSelectItem(selectList, itemId);
+	}
+
+	public Exercise getExercise(int itemId) {
+		return adminDao.getExercise(itemId);
+	}
+
+	public Food getFood(int itemId) {
+		return adminDao.getFood(itemId);
+	}
+
+	public QnABoard getQnA(int itemId) {
+		return adminDao.getQnA(itemId);
 	}
 }

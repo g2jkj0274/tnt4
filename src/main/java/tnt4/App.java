@@ -7,12 +7,10 @@ import tnt4.controller.MemberController;
 import tnt4.controller.OperationController;
 import tnt4.controller.Session;
 import tnt4.db.DBConnection;
-import tnt4.dto.Member;
 
 public class App {
 	private Session session;
 	
-	private Member member;
 	String loginId;
 
 	public App() {
@@ -95,6 +93,7 @@ public class App {
 
 			// 시스템 종료
 			if (command.equals("system exit")) {
+				Container.getDBConnection().close(); // DB 연결 닫기
 				break;
 			}
 

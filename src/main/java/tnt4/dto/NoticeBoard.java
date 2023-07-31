@@ -15,7 +15,6 @@ public class NoticeBoard {
         this.id = id;
         this.title = title;
     }
-    
 	public String getTitle() {
 		return title;
 	}

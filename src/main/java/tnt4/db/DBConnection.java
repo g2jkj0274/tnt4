@@ -176,9 +176,8 @@ public class DBConnection {
 			}
 		}
 	}
-
+	
 	public Connection getConnection() {
 		return connection;
 	}
 }
-
