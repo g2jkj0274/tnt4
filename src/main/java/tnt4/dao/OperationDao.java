@@ -224,7 +224,7 @@ public class OperationDao extends Dao {
 	public void upLikeExercise(int id, String loginId, String what) {
 		exercise = getExerciseById(id); // 운동의 추천수가 필요해서 불러와야함
 		member = memberService.getMemberByLoginId(loginId);// 반복추천 막기위해
-		int num = getlogByName(member.name, what, exercise.name);
+		int num = getlogByName(member.name, exercise.name, what);
 		if (num == 1) {// 추천을 할떄에는 추천 로그 db는 새로 추가되야함, num이 1이라는 것은 추천 로그에 없다는걸 의미, 추천한적이없다
 			setAddlog(member.name, exercise.name, what, exercise.link);
 		} else if (num == -1) { // 추천이 취소될떄 추천 로그 db 에는 삭제되야함

@@ -83,9 +83,6 @@ public class MemberDao extends Dao {
 	}
 
 	public void modify(int BmiId,String name, String gender, int height, int weight,  String loginedId) {
-//		StringBuilder sb = new StringBuilder();
-//		dbConnection.update("UPDATE `member` SET bmiId = '"+BmiId+"', `name` = '"+name+"', gender = '"+gender+"', height = "+height+", weight = "+weight+" WHERE loginId = '"+loginedId+"'; ");
-//		}
 		String userName=getMemberByLoginId(loginedId).name;
 
 		StringBuilder sb = new StringBuilder();

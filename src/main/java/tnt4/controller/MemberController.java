@@ -97,14 +97,6 @@ public class MemberController extends Controller {
 		memberService.join(loginId, loginPw, name, gender, height, weight, bmiId);
 
 		System.out.println("회원가입이 완료되었습니다.");
-
-		// 회원가입 후 정보 유지, DB에 저장
-		Member member = memberService.getMemberByLoginId(loginId);
-
-		session.setLoginedMember(member);
-		Member loginedMember = session.getLoginedMember();
-
-		System.out.printf("로그인 성공! [%s]님 환영합니다!\n", loginedMember.name);
 	}
 
 	public static String doLogin() {
@@ -147,8 +139,9 @@ public class MemberController extends Controller {
 		System.out.println("내가 추천한 운동과 식단");
 		System.out.println("--------------------------------------");
 		System.out.println("");
+		
 		printMemberLike();
-
+		
 		System.out.println("- - -");
 		System.out.println("돌아가기 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
 

@@ -273,8 +273,8 @@ public class OperationController extends Controller {
 				System.out.printf("%2s ||", (String) exerciseList.get(index));
 				System.out.print("       ");
 			}
+			System.out.println();
 		}
-		System.out.println();
 	}
 
 	// 식단 선택
@@ -396,8 +396,7 @@ public class OperationController extends Controller {
 			for (int j = 0; j < 5; j++) {
 				int index = i + j;
 				if (index < foodList.size()) {
-					System.out.print(foodList.get(index));
-					System.out.print("       ");
+					
 					System.out.printf("%2s ||", (String) foodList.get(index));
 					System.out.print("        ");
 				}
