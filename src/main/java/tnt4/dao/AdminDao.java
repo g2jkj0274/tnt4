@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import tnt4.container.Container;
 import tnt4.db.DBConnection;
@@ -17,6 +18,7 @@ import tnt4.dto.QnABoard;
 
 public class AdminDao {
 	private DBConnection dbConnection;
+	public static Scanner sc;
 
 	public AdminDao() {
 		dbConnection = Container.getDBConnection();
@@ -219,6 +221,8 @@ public class AdminDao {
 			preparedStatement.setInt(7, itemId); // 아이템 ID는 맨 마지막에 설정
 
 			preparedStatement.executeUpdate();
+			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
+			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -238,6 +242,8 @@ public class AdminDao {
 			preparedStatement.setInt(6, itemId);
 
 			preparedStatement.executeUpdate();
+			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
+			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -254,6 +260,8 @@ public class AdminDao {
 			preparedStatement.setInt(3, itemId);
 
 			preparedStatement.executeUpdate();
+			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
+			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -270,6 +278,8 @@ public class AdminDao {
 			preparedStatement.setInt(3, itemId);
 
 			preparedStatement.executeUpdate();
+			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
+			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

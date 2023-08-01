@@ -1,6 +1,5 @@
 package tnt4.controller;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import tnt4.container.Container;
