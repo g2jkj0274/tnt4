@@ -355,7 +355,6 @@ public class OperationDao extends Dao {
 
 			preparedStatement.executeUpdate();
 
-			System.out.println("--------------------");
 			System.out.println("유저의 QnA가 성공적으로 등록되었습니다.");
 			System.out.println("[입력한 값]");
 			System.out.println(" - 제목 : " + userWriteQnAName);

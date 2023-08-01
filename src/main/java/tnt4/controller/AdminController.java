@@ -47,7 +47,7 @@ public class AdminController extends Controller {
 
 	// 운동 장소(헬스장/홈트) 구분
 	private void adminSelectPlace() {
-		System.out.println("--------------------");
+		System.out.println();
 		System.out.println("장소를 입력하세요.");
 		System.out.println("헬스장 / 홈트");
 		System.out.print(">>> ");
@@ -62,7 +62,7 @@ public class AdminController extends Controller {
 
 	// 운동 장소(유산소/무산소) 구분
 	private void adminSelectExercise(String selectPlace) {
-		System.out.println("--------------------");
+		System.out.println();
 		System.out.println("장소를 입력하세요.");
 		System.out.println("유산소 / 무산소");
 		System.out.print(">>> ");
@@ -77,17 +77,15 @@ public class AdminController extends Controller {
 
 	// 관리자 - 운동 리스트 출력
 	private void showAdminExerciseList(String selectPlace, String selectExercise) {
-		// 가독성
-		System.out.println();
 		List<String> exerciseList = adminService.getAdminExerciseList(selectPlace, selectExercise);
 		System.out.println();
 		System.out.println("[입력한 값]");
 		System.out.printf("- 장소 : %s / 종류 : %s \n", selectPlace, selectExercise);
-		System.out.println("===== 운동 리스트 =====");
+		System.out.println("==============[운동 리스트]==============");
 		for (String exercise : exerciseList) {
 			System.out.println(exercise);
 		}
-		System.out.println("====================");
+		System.out.println("=========================================");
 		String selectList = "exercise";
 		// 아이템을 어떻게 할 것인지 실행
 		itemManagement(selectList);
@@ -98,11 +96,11 @@ public class AdminController extends Controller {
 		// 가독성
 		System.out.println();
 		List<Food> foodList = adminService.getAdminFoodList();
-		System.out.println("===== 식단 리스트 =====");
+		System.out.println("======[식단 리스트]======");
 		for (Food food : foodList) {
 			System.out.println("No." + food.id + " / 이름 : " + food.getName());
 		}
-		System.out.println("====================");
+		System.out.println("=========================");
 		String selectList = "food";
 		// 아이템을 어떻게 할 것인지 실행
 		itemManagement(selectList);
@@ -113,11 +111,11 @@ public class AdminController extends Controller {
 		// 가독성
 		System.out.println();
 		List<NoticeBoard> noticeList = adminService.getAdminNoticeList();
-		System.out.println("===== 공지사항 리스트 =====");
+		System.out.println("=====[공지사항 리스트]=====");
 		for (NoticeBoard notice : noticeList) {
 			System.out.println("No." + notice.getId() + " / 제목 : " + notice.getTitle());
 		}
-		System.out.println("=======================");
+		System.out.println("===========================");
 		String selectList = "notice";
 		// 아이템을 어떻게 할 것인지 실행
 		itemManagement(selectList);
@@ -129,20 +127,21 @@ public class AdminController extends Controller {
 		System.out.println();
 		List<QnABoard> qnaList = adminService.getAdminQnAList();
 		// 기존의 QnA 리스트 출력
-		System.out.println("===== QnA 리스트 =====");
+		System.out.println("================[QnA 리스트]================");
 		for (QnABoard qna : qnaList) {
 			System.out.println("No." + qna.getId() + " / 사용자 질문 : " + qna.getUserQuestionName());
 		}
+		System.out.println("============================================");
 		// 가독성
 		System.out.println();
 		// 추가된 QnA 리스트 출력
-		System.out.println("===== 추가된 QnA 리스트 =====");
+		System.out.println("============[추가된 QnA 리스트]============");
 		for (QnABoard qna : qnaList) {
 			if (qna.getId() > lastDisplayedQnAId) {
 				System.out.println("No." + qna.getId() + " / 사용자 질문 : " + qna.getUserQuestionName());
 			}
 		}
-		System.out.println("====================");
+		System.out.println("===========================================");
 		String selectList = "QnA";
 		// 아이템을 어떻게 할 것인지 실행
 		itemManagement(selectList);
@@ -162,7 +161,7 @@ public class AdminController extends Controller {
 		for (Member admin : adminList) {
 			System.out.println("ID : " + admin.getId() + " / 이름 : " + admin.getName());
 		}
-		System.out.println("====================");
+		System.out.println("=======================");
 		String selectList = "member";
 		// 아이템을 어떻게 할 것인지 실행
 		itemManagement(selectList);
@@ -172,10 +171,11 @@ public class AdminController extends Controller {
 	private void itemManagement(String selectList) {
 		String adminSelect = null;
 		if (selectList.equals("member")) {
-			System.out.println("[명령어]");
+			System.out.println();
+			System.out.println("[명령어]=================");
 			System.out.println(" - 메인 : main");
 			System.out.println(" - 회원 강제삭제 : delete");
-			System.out.println("====================");
+			System.out.println("=========================");
 			System.out.print(">>> ");
 			adminSelect = sc.nextLine();
 			w1 : switch (adminSelect) {
@@ -191,7 +191,8 @@ public class AdminController extends Controller {
 				itemManagement(selectList);
 			}
 		} else {
-			System.out.println("[명령어]");
+			System.out.println();
+			System.out.println("[명령어]============");
 			System.out.println(" - 메인 : main");
 			System.out.println(" - 추가 : write");
 			System.out.println(" - 수정 : modify");
@@ -222,7 +223,7 @@ public class AdminController extends Controller {
 	// 선택한 리스트에 아이템 추가
 	private void writeAdminSelectList(String selectList) {
 		if (!selectList.equals("member")) {
-			System.out.println("--------------------");
+			System.out.println();
 			System.out.println("아이템 정보를 입력하세요.");
 			switch (selectList) {
 			case "exercise":
@@ -247,7 +248,7 @@ public class AdminController extends Controller {
 					sc.nextLine();
 				} while (writeBmiId < 1 || writeBmiId > 3);
 				adminService.writeAdminExercise(writePlace, writeExercise, writeName, writeLink, writeBmiId);
-				System.out.println("--------------------");
+				System.out.println();
 				System.out.println("[입력한 값]");
 				System.out.printf(" - 장소 : %s / 종류 : %s \n", writePlace, writeExercise);
 				System.out.printf(" - 이름 : %s / 링크 : %s / BMI ID : %d \n", writeName, writeLink, writeBmiId);
@@ -292,7 +293,7 @@ public class AdminController extends Controller {
 					sc.nextLine();
 				} while (writeFoodBmiId < 1 || writeFoodBmiId > 3);
 				adminService.writeAdminFood(writeFoodName, writeFoodKal, writeFoodPro, writeFoodBmiId);
-				System.out.println("--------------------");
+				System.out.println();
 				System.out.println("[입력한 값]");
 				System.out.printf(" - 음식명 : %s / 칼로리 : %s / 프로틴 : %s / BMI ID : %d \n", writeFoodName, writeFoodKal, writeFoodPro, writeFoodBmiId);
 				System.out.println("식단 아이템 추가가 완료되었습니다.");
@@ -303,7 +304,7 @@ public class AdminController extends Controller {
 				System.out.print("공지사항 내용 : ");
 				String writeNoticeDetail = sc.nextLine();
 				adminService.writeAdminNotice(writeNoticeTitle, writeNoticeDetail);
-				System.out.println("--------------------");
+				System.out.println();
 				System.out.println("[입력한 값]");
 				System.out.printf(" - 제목 : %s\n", writeNoticeTitle);
 				System.out.printf(" - 내용 : %s\n", writeNoticeDetail);
@@ -320,7 +321,7 @@ public class AdminController extends Controller {
 				String writeAdminAnswerText = sc.nextLine();
 				adminService.writeAdminQnA(writeUserQuestionName, writeUserQuestionText, writeAdminAnswerName,
 						writeAdminAnswerText);
-				System.out.println("--------------------");
+				System.out.println();
 				System.out.println("[입력한 값]");
 				System.out.printf(" - Q.제목 : %s \n - Q.내용 : %s \n", writeUserQuestionName, writeUserQuestionText);
 				System.out.printf(" - A.제목 : %s \n - A.내용 : %s \n", writeAdminAnswerName, writeAdminAnswerText);
@@ -336,7 +337,7 @@ public class AdminController extends Controller {
 	// 수정할 아이템을 선택하고, 해당 아이템 정보를 수정하는 메서드
 	private void modifyAdminSelectList(String selectList) {
 		if (!selectList.equals("member")) {
-			System.out.println("--------------------");
+			System.out.println("");
 			System.out.println("수정할 아이템의 ID를 입력하세요.");
 			System.out.print(">>> ");
 			int itemId;
@@ -374,8 +375,7 @@ public class AdminController extends Controller {
 	private void modifyExercise(int itemId) {
 		// 데이터베이스에서 운동 정보 가져오기
 		Exercise exercise = adminService.getExercise(itemId);
-		// ... 기존 코드와 동일한 내용 ...
-		System.out.println("--------------------");
+		System.out.println();
 		System.out.println("아이템 정보를 수정하세요.");
 		// 선택한 운동 보여줌
 		System.out.printf(" - 번호 : %d\n", exercise.getId());
@@ -385,7 +385,6 @@ public class AdminController extends Controller {
 		System.out.printf(" - 링크 : %s\n", exercise.getLink());
 		System.out.printf(" - 추천 수 : %d\n", exercise.getLike());
 		System.out.printf(" - BMI ID : %d\n", exercise.getBmiId());
-		System.out.println("--------------------");
 		// 수정할 정보 입력 받기
 		System.out.print("운동명 : ");
 		String modifyName = sc.nextLine();
@@ -412,14 +411,6 @@ public class AdminController extends Controller {
 		// 데이터베이스에 아이템 수정
 		adminService.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink, modifyLike,
 				modifyBmiId);
-		System.out.println("--------------------");
-		System.out.printf("아이템 (ID: %d) 수정이 완료되었습니다.\n", itemId);
-
-		// 데이터베이스에 운동 정보 수정
-		adminService.modifyAdminExercise(itemId, modifyName, modifyLocation, modifyKind, modifyLink, modifyLike,
-				modifyBmiId);
-
-		System.out.println("--------------------");
 		System.out.printf("아이템 (ID: %d) 수정이 완료되었습니다.\n", itemId);
 	}
 
@@ -427,8 +418,6 @@ public class AdminController extends Controller {
 	private void modifyFood(int itemId) {
 		// 데이터베이스에서 식단 정보 가져오기
 		Food food = adminService.getFood(itemId);
-		// ... 기존 코드와 동일한 내용 ...
-		System.out.println("--------------------");
 		System.out.println("아이템 정보를 수정하세요.");
 		// 선택한 식단 보여줌
 		System.out.printf(" - 번호 : %d\n", food.getId());
@@ -437,7 +426,6 @@ public class AdminController extends Controller {
 		System.out.printf(" - 프로틴 : %d\n", food.getPro());
 		System.out.printf(" - 추천 수 : %d\n", food.getLike());
 		System.out.printf(" - BMI ID : %d\n", food.getBmiId());
-		System.out.println("--------------------");
 		// 수정할 정보 입력 받기
 		System.out.print("음식명 : ");
 		String modifyFoodName = sc.nextLine();
@@ -458,14 +446,6 @@ public class AdminController extends Controller {
 		// 데이터베이스에 아이템 수정
 		adminService.modifyAdminFood(itemId, modifyFoodName, modifyFoodKal, modifyFoodPro, modifyFoodLike,
 				modifyFoodBmiId);
-		System.out.println("--------------------");
-		System.out.printf("아이템 (ID: %d) 수정이 완료되었습니다.\n", itemId);
-
-		// 데이터베이스에 식단 정보 수정
-		adminService.modifyAdminFood(itemId, modifyFoodName, modifyFoodKal, modifyFoodPro, modifyFoodLike,
-				modifyFoodBmiId);
-
-		System.out.println("--------------------");
 		System.out.printf("아이템 (ID: %d) 수정이 완료되었습니다.\n", itemId);
 	}
 
@@ -473,8 +453,7 @@ public class AdminController extends Controller {
 	private void modifyNotice(int itemId) {
 		// 데이터베이스에서 공지사항 정보 가져오기
 		NoticeBoard notice = adminService.getNotice(itemId);
-		// ... 기존 코드와 동일한 내용 ...
-		System.out.println("--------------------");
+		System.out.println();
 		System.out.println("공지사항을 수정하세요.");
 		// 선택한 공지사항 보여줌
 		System.out.printf(" - 번호 : %d\n", notice.getId());
@@ -486,13 +465,6 @@ public class AdminController extends Controller {
 		System.out.print("공지사항 내용 : ");
 		String modifyDetail = sc.nextLine();
 		adminService.modifyAdminNotice(itemId, modifyTitle, modifyDetail);
-		System.out.println("--------------------");
-		System.out.printf("공지사항 (ID: %d) 수정이 완료되었습니다.\n", itemId);
-
-		// 데이터베이스에 공지사항 정보 수정
-		adminService.modifyAdminNotice(itemId, modifyTitle, modifyDetail);
-
-		System.out.println("--------------------");
 		System.out.printf("공지사항 (ID: %d) 수정이 완료되었습니다.\n", itemId);
 	}
 
@@ -500,8 +472,6 @@ public class AdminController extends Controller {
 	private void modifyQnA(int itemId) {
 		// 데이터베이스에서 QnA 정보 가져오기
 		QnABoard qna = adminService.getQnA(itemId);
-		// ... 기존 코드와 동일한 내용 ...
-		System.out.println("--------------------");
 		System.out.println("QnA를 수정하세요.");
 		// 선택한 QnA 보여줌
 		System.out.printf(" - 번호 : %d\n", qna.getId());
@@ -509,33 +479,25 @@ public class AdminController extends Controller {
 		System.out.printf(" - Q.내용 : %s\n", qna.getUserQuestionText());
 		System.out.printf(" - A.제목 : %s\n", qna.getAdminAnswerName());
 		System.out.printf(" - A.내용 : %s\n", qna.getAdminAnswerText());
-		System.out.println("--------------------");
 		// 수정할 정보 입력 받기
 		System.out.print("A.제목 : ");
 		String modifyAdminAnswerName = sc.nextLine();
 		System.out.print("A.내용 : ");
 		String modifyAdminAnswerText = sc.nextLine();
 		adminService.modifyAdminQnA(itemId, modifyAdminAnswerName, modifyAdminAnswerText);
-		System.out.println("--------------------");
-		System.out.printf("QnA (ID: %d) 수정이 완료되었습니다.\n", itemId);
-
-		// 데이터베이스에 QnA 정보 수정
-		adminService.modifyAdminQnA(itemId, modifyAdminAnswerName, modifyAdminAnswerText);
-
-		System.out.println("--------------------");
 		System.out.printf("QnA (ID: %d) 수정이 완료되었습니다.\n", itemId);
 	}
 
 	// 선택한 리스트의 아이템 삭제
 	private void deleteAdminSelectList(String selectList) {
-	    System.out.println("--------------------");
+	    System.out.println();
 	    System.out.println("삭제할 아이템의 ID를 입력하세요.");
 	    System.out.print(">>> ");
 	    String input = sc.nextLine();
 
 	    try {
 	        int itemId = Integer.parseInt(input);
-	        System.out.println("--------------------");
+	        System.out.println();
 	        System.out.println("삭제하시겠습니까? (Y/N)");
 	        System.out.print(">>> ");
 	        String confirm = sc.nextLine();
@@ -550,7 +512,6 @@ public class AdminController extends Controller {
 	    } catch (NumberFormatException e) {
 	        System.out.println("올바른 숫자를 입력하세요.");
 	    }
-	    System.out.println("아아아");
 	}
 
 

@@ -81,7 +81,7 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 		String gender;
 		w1: while (true) {
-			System.out.printf("남자 / 여자 \n성별 : ");
+			System.out.printf("남자 / 여자 : ");
 			gender = sc.nextLine();
 			if (!gender.equals("남자") && !gender.equals("여자")) {
 				System.out.println("남자 또는 여자를 입력해주세요");
@@ -90,33 +90,33 @@ public class MemberController extends Controller {
 			break; // 남자, 여자 라고 잘입력해서 조건충족후 탈출
 		}
 		int height = 0;
-	    // 키 입력 받기
-	    while (true) {
-	        System.out.printf("키 : ");
-	        if (sc.hasNextInt()) {
-	            height = sc.nextInt();
-	            sc.nextLine(); // 버퍼 비우기
-	            break;
-	        } else {
-	            System.out.println("키를 숫자로 입력해주세요.");
-	            sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
-	            continue;
-	        }
-	    }
-	    int weight = 0;
-	    // 몸무게 입력 받기
-	    while (true) {
-	        System.out.printf("몸무게 : ");
-	        if (sc.hasNextInt()) {
-	            weight = sc.nextInt();
-	            sc.nextLine(); // 버퍼 비우기
-	            break;
-	        } else {
-	            System.out.println("몸무게를 숫자로 입력해주세요.");
-	            sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
-	            continue;
-	        }
-	    }
+		// 키 입력 받기
+		while (true) {
+			System.out.printf("키 : ");
+			if (sc.hasNextInt()) {
+				height = sc.nextInt();
+				sc.nextLine(); // 버퍼 비우기
+				break;
+			} else {
+				System.out.println("키를 숫자로 입력해주세요.");
+				sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
+				continue;
+			}
+		}
+		int weight = 0;
+		// 몸무게 입력 받기
+		while (true) {
+			System.out.printf("몸무게 : ");
+			if (sc.hasNextInt()) {
+				weight = sc.nextInt();
+				sc.nextLine(); // 버퍼 비우기
+				break;
+			} else {
+				System.out.println("몸무게를 숫자로 입력해주세요.");
+				sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
+				continue;
+			}
+		}
 
 		int bmiId = MemberController.getBmi(height, weight);
 		memberService.join(loginId, loginPw, name, gender, height, weight, bmiId);
@@ -150,45 +150,51 @@ public class MemberController extends Controller {
 
 	private void doLogout() {
 		session.setLoginedMember(null);
+		System.out.println("");
 		System.out.println("로그아웃 되었습니다.");
 	}
 
 	// My Page
 	private void showInfo() {
-		System.out.println("= 내 정보 =");
+		System.out.println();
+		System.out.println("==[내 정보]==");
 		System.out.println("이름:" + session.getLoginedMember().name);
 		System.out.println("성별:" + session.getLoginedMember().gender);
 		System.out.println("키:" + session.getLoginedMember().height);
 		System.out.println("몸무게:" + session.getLoginedMember().weight);
 		System.out.println("BMI:" + session.getLoginedMember().bmiId);
+		System.out.println("=============");
+
 		System.out.println("");
-		System.out.println("내가 추천한 운동과 식단");
-		System.out.println("--------------------------------------");
-		System.out.println("");
-		
+
 		printMemberLike();
+
+		System.out.println();
 		
-		System.out.println("- - -");
-		System.out.println("메인화면 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
+		System.out.println("[My Page]========================");
+		System.out.println(" - 메인화면 : main");
+		System.out.println(" - 회원 정보 수정 : info modify");
+		System.out.println(" - 비밀번호 변경 : pw modify");
+		System.out.println(" - 회원 탈퇴 : withdraw");
+		System.out.println("=================================");
 		System.out.printf(">>> ");
 
 		while (true) {
 			String input = sc.nextLine();
 			switch (input) {
-			case "1":
+			case "main":
 				return; // 메인화면
-			case "2":
+			case "info modify":
 				doModify(); // 회원 정보 수정
 				return;
-			case "3":
+			case "pw modify":
 				dochangePw(); // 비밀번호 변경
 				return;
-			case "4":
+			case "withdraw":
 				doDelete(session); // 회원 탈퇴
 				return;
 			default:
 				System.out.println("존재하지 않는 명령어 입니다. 다시 입력해주세요.");
-				System.out.println("돌아가기 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
 				break;
 			}
 		}
@@ -196,43 +202,46 @@ public class MemberController extends Controller {
 
 	// 비밀번호 변경
 	private void dochangePw() {
-	    System.out.println("현재 비밀번호 : ");
-	    String nowPw = sc.nextLine();
-	    Member member = memberService.getMemberByLoginPw(nowPw);
+		System.out.println();
+		System.out.println("비밀번호를 변경합니다.");
+		System.out.printf("현재 비밀번호 : ");
+		String nowPw = sc.nextLine();
+		Member member = memberService.getMemberByLoginPw(nowPw);
 
-	    if (member == null) {
-	        System.out.println("비밀번호가 맞지 않습니다.");
-	        dochangePw();
-	        return;
-	    }
+		if (member == null) {
+			System.out.println("비밀번호가 맞지 않습니다.");
+			dochangePw();
+			return;
+		}
 
-	    String loginPw = null;
-	    String loginPwConfirm = null;
+		String loginPw = null;
+		String loginPwConfirm = null;
 
-	    while (true) {
-	        System.out.println("현재 아이디는 " + member.loginId);
-	        System.out.printf("변경할 비밀번호 : ");
-	        loginPw = sc.nextLine();
-	        System.out.printf("비밀번호 확인 : ");
-	        loginPwConfirm = sc.nextLine();
+		while (true) {
+			System.out.printf("변경할 비밀번호 : ");
+			loginPw = sc.nextLine();
+			System.out.printf("비밀번호 확인 : ");
+			loginPwConfirm = sc.nextLine();
 
-	        if (!loginPw.equals(loginPwConfirm)) {
-	            System.out.println("비밀번호를 다시 입력해주세요.");
-	            continue;
-	        }
-	        memberService.changeNewPw(loginPw, member.loginId);
-	        System.out.println("비밀번호 변경 완료");
-	        break;
-	    }
+			if (!loginPw.equals(loginPwConfirm)) {
+				System.out.println("비밀번호를 다시 입력해주세요.");
+				continue;
+			}
+			memberService.changeNewPw(loginPw, member.loginId);
+			System.out.println("비밀번호 변경 완료");
+			break;
+		}
 	}
 
 	public static void doDelete(Session session) {
 		Member loginedMember = session.getLoginedMember();
+		System.out.println();
 		System.out.println("진짜 탈퇴하시겠습니까 ? Y/N");
 		// 수정함 : next() -> nextLine() - 이유 : next()로 하면 삭제 후 App클래스에서 다시 입력하세요가 출력됨
 		String an = sc.nextLine();
 		if (an.equals("Y") || an.equals("y")) {
 			memberService.delete(loginedMember);
+			System.out.println("회원 탈퇴 완료");
 			session.setLoginedMember(null);
 		} else if (an.equalsIgnoreCase("N")) {
 			System.out.println("취소되었습니다.");
@@ -246,12 +255,13 @@ public class MemberController extends Controller {
 			System.out.println("로그인을 먼저 하십시오");
 		}
 		Member loginedMember = session.getLoginedMember();
-		System.out.println("수정을 시작");
+		System.out.println();
+		System.out.println("회원 정보를 수정합니다.");
 		System.out.printf("이름 : ");
 		String name = sc.nextLine();
 		String gender;
 		w1: while (true) {
-			System.out.printf("ex) 남자 , 여자 \n성별 :");
+			System.out.printf("남자 / 여자 : ");
 			gender = sc.nextLine();
 			if (!gender.equals("남자") && !gender.equals("여자")) {
 				System.out.println("남자 또는 여자를 입력해주세요");
@@ -273,6 +283,7 @@ public class MemberController extends Controller {
 		loginedMember.weight = weight;
 		loginedMember.bmiId = bmiId;
 		memberService.modify(bmiId, name, gender, height, weight, loginedMember.loginId);
+		System.out.println("회원 정보 수정 완료");
 	}
 
 	// bmi 공식
@@ -294,12 +305,12 @@ public class MemberController extends Controller {
 		}
 		return bmiId;
 	}
-
+	
 	public void printMemberLike() {
 		List<String> memberLikeList = memberService.getMemberLog(session.getLoginedMember().name);
-
-		System.out.println(" 번호   ||              이름              ||          링크         ");
-		System.out.println("------------------------------------------------------------------------------");
+		System.out.println("==================================[내가 추천한 운동과 식단]==================================");
+		System.out.println(" 번호  ||               이름                ||          링크         ");
+		System.out.println("---------------------------------------------------------------------------------------------");
 		for (int i = 2; i < memberLikeList.size() + 2; i += 2) {
 			for (int j = 0; j < 2; j++) {
 				int index = i + j - 2;
@@ -314,5 +325,6 @@ public class MemberController extends Controller {
 			}
 			System.out.println();
 		}
+		System.out.println("=============================================================================================");
 	}
 }

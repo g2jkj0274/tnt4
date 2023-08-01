@@ -49,7 +49,7 @@ public class App {
 				System.out.println("로그인 : member login");
 				System.out.println("회원가입 : member join");
 				System.out.println("프로그램 종료: system exit");
-				System.out.println("======================");
+				System.out.println("=========================");
 				System.out.printf(">>> ");
 				select = Container.getScanner().nextLine();
 
@@ -86,13 +86,13 @@ public class App {
 
 			if (session.getLoginedMember().loginId.equals("admin")) {
 				System.out.println("");
-				System.out.println("[관리자 권한 명령어 목록]=======");
+				System.out.println("[관리자 권한 명령어 목록]========");
 				System.out.println(" - 운동 관리 : exercise");
 				System.out.println(" - 식단 관리 : food");
 				System.out.println(" - 공지사항 관리 : notice");
 				System.out.println(" - QnA 관리 : QnA");
 				System.out.println(" - 유저 관리 : member");
-				System.out.println("================================");
+				System.out.println("=================================");
 			}
 
 			System.out.printf("명령어 >>> ");
@@ -155,6 +155,7 @@ public class App {
 			controller.doAction(command, loginId);
 		}
 		Container.getScanner().close();
+		System.out.println();
 		System.out.println("==프로그램을 종료합니다==");
 	}
 }

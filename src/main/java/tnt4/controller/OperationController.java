@@ -39,114 +39,126 @@ public class OperationController extends Controller {
 
 	private void showAnnouncement() {
 		while (true) {
-			System.out.println("공지사항 ===============");
+			System.out.println();
+			System.out.println("========[공지사항]========");
+			System.out.println("번호  || 제목");
+			System.out.println("--------------------------");
 			List<NoticeBoard> noticeBoardList = operationService.getNoticeBoard();
 
 			int index = 1;
 			for (NoticeBoard noticeBoard : noticeBoardList) {
-				System.out.println(index + ". " + noticeBoard.getTitle());
+				System.out.println("No. " + index + " || " + noticeBoard.getTitle());
 				index++;
 			}
-			System.out.println("======================");
+			System.out.println("==========================");
 
 			// 가독성 때문에 한 줄 띄움
 			System.out.println("");
 
-			System.out.println("QnA===================");
+			System.out.println("============[QnA]==============");
+			System.out.println("번호  || 제목");
+			System.out.println("--------------------------");
 			List<QnABoard> QnABoardList = operationService.getQnABoard();
 
 			index = 1;
 			for (QnABoard QnABoard : QnABoardList) {
-				System.out.println(index + ". " + QnABoard.getUserQuestionName());
+				System.out.println("No. " + index + " || " + QnABoard.getUserQuestionName());
 				index++;
 			}
+			System.out.println("===============================");
 
-			System.out.println("======================");
+			System.out.println();
 
-			System.out.println("공지사항 보기 : board 숫자");
-			System.out.println("QnA 보기 : QnA 숫자");
-			System.out.println("QnA 작성 : write QnA");
+			System.out.println("[공지사항 및 QnA]===========");
+			System.out.println("공지사항 보기 : board ID");
+			System.out.println("QnA 보기 : QnA ID");
+			System.out.println("QnA 작성 : QnA write");
 			System.out.println("메인으로 돌아가기 : main");
-
+			System.out.println("============================");
 			System.out.printf(">>> ");
 			String userInput = sc.nextLine();
 
-			if (userInput.equals("main")) {
-				// 돌아가기
-				break;
-			} else if (userInput.startsWith("board") && userInput.length() > 6) {
-				// "board" 다음에 숫자가 오는지 확인
-				String selectedIdStr = userInput.substring(6).trim();
-				// 숫자 부분이 비어있는지 확인
-				if (selectedIdStr.isEmpty()) {
-					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
-					continue; // 루프의 처음으로 돌아가서 유효한 입력을 받도록 함
-				}
-				try {
-					int selectedId = Integer.parseInt(selectedIdStr);
-					selectedId--;
-					if (selectedId >= 0 && selectedId < noticeBoardList.size()) {
-						NoticeBoard selectedNotice = noticeBoardList.get(selectedId);
-						System.out.println("======================");
-						System.out.println("제목 : " + selectedNotice.getTitle());
-						System.out.println("내용 : " + selectedNotice.getDetail());
-						System.out.println("======================");
-					} else {
-						System.out.println("해당하는 공지사항이 없습니다.");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
-				}
-			} else if (userInput.startsWith("QnA") && userInput.length() > 3) {
-				// "QnA" 다음에 숫자가 오는지 확인
-				String selectedIdStr = userInput.substring(3).trim();
-				// 숫자 부분이 비어있는지 확인
-				if (selectedIdStr.isEmpty()) {
-					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
-					continue; // 루프의 처음으로 돌아가서 유효한 입력을 받도록 함
-				}
-				try {
-					int selectedId = Integer.parseInt(selectedIdStr);
-					selectedId--;
-					if (selectedId >= 0 && selectedId < QnABoardList.size()) {
-						QnABoard selectedQnA = QnABoardList.get(selectedId);
-						System.out.println("======================");
-						System.out.println("질문 : " + selectedQnA.getUserQuestionName());
-						System.out.println("질문내용 : " + selectedQnA.getUserQuestionText());
-						System.out.println("답변 : " + selectedQnA.getAdminAnswerName());
-						System.out.println("답변내용 : " + selectedQnA.getAdminAnswerText());
-						System.out.println("======================");
-					} else {
-						System.out.println("해당하는 QnA가 없습니다.");
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
-				}
-			} else if (userInput.startsWith("write QnA")) {
+			System.out.println();
+			switch (userInput) {
+			case "main":
+				System.out.println("메인 화면으로 돌아갑니다.");
+				return;
+			case "QnA write":
 				userWriteQnA();
-			} else {
-				System.out.println("잘못된 입력입니다. 다시 입력하세요.");
+				break;
+			default:
+				if (userInput.startsWith("board") && userInput.length() > 6) {
+					// "board" 다음에 숫자가 오는지 확인
+					String selectedIdStr = userInput.substring(6).trim();
+					// 숫자 부분이 비어있는지 확인
+					if (selectedIdStr.isEmpty()) {
+						System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+						continue; // 루프의 처음으로 돌아가서 유효한 입력을 받도록 함
+					}
+					try {
+						int selectedId = Integer.parseInt(selectedIdStr);
+						selectedId--;
+						if (selectedId >= 0 && selectedId < noticeBoardList.size()) {
+							NoticeBoard selectedNotice = noticeBoardList.get(selectedId);
+							System.out.printf("==============================[%s]==============================\n",
+									selectedNotice.getTitle());
+							System.out.println("내용 : " + selectedNotice.getDetail());
+							System.out.println(
+									"============================================================================");
+						} else {
+							System.out.println("해당하는 공지사항이 없습니다.");
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+					}
+				} else if (userInput.startsWith("QnA") && userInput.length() > 3) {
+					// "QnA" 다음에 숫자가 오는지 확인
+					String selectedIdStr = userInput.substring(3).trim();
+					// 숫자 부분이 비어있는지 확인
+					if (selectedIdStr.isEmpty()) {
+						System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+						continue; // 루프의 처음으로 돌아가서 유효한 입력을 받도록 함
+					}
+					try {
+						int selectedId = Integer.parseInt(selectedIdStr);
+						selectedId--;
+						if (selectedId >= 0 && selectedId < QnABoardList.size()) {
+							QnABoard selectedQnA = QnABoardList.get(selectedId);
+							System.out.printf(
+									"==================================[%s]==================================\n",
+									userInput);
+							System.out.println("질문 : " + selectedQnA.getUserQuestionName());
+							System.out.println("질문내용 : " + selectedQnA.getUserQuestionText());
+							System.out.println(
+									"---------------------------------------------------------------------------");
+							System.out.println("답변 : " + selectedQnA.getAdminAnswerName());
+							System.out.println("답변내용 : " + selectedQnA.getAdminAnswerText());
+							System.out.println(
+									"===========================================================================");
+						} else {
+							System.out.println("해당하는 QnA가 없습니다.");
+						}
+					} catch (NumberFormatException e) {
+						System.out.println("잘못된 입력입니다. 숫자로 다시 입력하세요.");
+					}
+				} else {
+					System.out.println("잘못된 입력입니다. 다시 입력하세요.");
+				}
 			}
 		}
-		System.out.println("--------------------");
 	}
 
 	// QnA 작성 기능
 	private void userWriteQnA() {
 		System.out.println("");
-		System.out.println("======================");
-		System.out.printf("(질문) : ");
+		System.out.println("===========================================================================");
+		System.out.printf("질문 : ");
 		String userWriteQnAName = sc.nextLine();
-		System.out.println("(내용)");
-		System.out.printf(">>> ");
+		System.out.printf("내용 : ");
 		String userWriteQnAText = sc.nextLine();
+		System.out.println("===========================================================================");
 
 		operationService.userWriteQnA(userWriteQnAName, userWriteQnAText);
-
-		// 가독성 향상용 줄 바꿈
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
 	}
 
 	// 운동/ 식단 선택
@@ -255,20 +267,27 @@ public class OperationController extends Controller {
 		List<String> exerciseList1 = operationService.getExerciseList(selectPlace, selectExercise, loginId);
 		List<String> exerciseList2 = operationService.getExerciseList2(selectPlace, selectExercise, loginId);
 		System.out.println();
-		System.out.println("=========================================[회원들이 추천한 운동 TOP 3]===============================================");
-		System.out.println("--------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"=========================================[회원들이 추천한 운동 TOP 3]===============================================");
+		System.out.println(
+				"--------------------------------------------------------------------------------------------------------------------");
 		System.out.println("No. ||               이름                      ||   추천수  ||             유튜브 링크            ");
-		System.out.println("--------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"--------------------------------------------------------------------------------------------------------------------");
 		printExerciseList(exerciseList2, 12);
-		
+
 		System.out.println();
-		
-		System.out.println("==============================================[회원님의 맞춤 운동]==================================================");
-		System.out.println("--------------------------------------------------------------------------------------------------------------------");
+
+		System.out.println(
+				"==============================================[회원님의 맞춤 운동]==================================================");
+		System.out.println(
+				"--------------------------------------------------------------------------------------------------------------------");
 		System.out.println("No. ||               이름                      ||   추천수  ||             유튜브 링크            ");
-		System.out.println("--------------------------------------------------------------------------------------------------------------------");
+		System.out.println(
+				"--------------------------------------------------------------------------------------------------------------------");
 		printExerciseList(exerciseList1, exerciseList1.size());
-		System.out.println("====================================================================================================================");
+		System.out.println(
+				"====================================================================================================================");
 	}
 
 	public void printExerciseListByRandom(List<String> exerciseList, int num1, int num2) {
