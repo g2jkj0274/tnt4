@@ -245,7 +245,8 @@ public class AdminDao {
 
 	// 공지사항 수정
 	public void modifyAdminNotice(int itemId, String modifyTitle, String modifyDetail) {
-		try (Connection connection = dbConnection.getConnection()) {
+		try {
+			Connection connection = dbConnection.getConnection();
 			String query = "UPDATE `noticeBoard` SET `title` = ?, `detail` = ?, `updateDate` = NOW() WHERE `id` = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, modifyTitle);
@@ -260,7 +261,8 @@ public class AdminDao {
 
 	public void modifyAdminQnA(int itemId, String userQuestionName, String userQuestionText,
 			String modifyAdminAnswerName, String modifyAdminAnswerText) {
-		try (Connection connection = dbConnection.getConnection()) {
+		try {
+			Connection connection = dbConnection.getConnection();
 			String query = "UPDATE `qna` SET `adminAnswerName` = ?, `adminAnswerText` = ? WHERE `id` = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setString(1, modifyAdminAnswerName);
@@ -311,7 +313,9 @@ public class AdminDao {
 
 	public Exercise getExercise(int itemId) {
 		Exercise exercise = null;
-		try (Connection connection = dbConnection.getConnection()) {
+
+		try {
+			Connection connection = dbConnection.getConnection();
 			String query = "SELECT * FROM `exercise` WHERE `id` = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, itemId);
@@ -335,7 +339,8 @@ public class AdminDao {
 
 	public Food getFood(int itemId) {
 		Food food = null;
-		try (Connection connection = dbConnection.getConnection()) {
+		try {
+			Connection connection = dbConnection.getConnection();
 			String query = "SELECT * FROM `food` WHERE `id` = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, itemId);
@@ -355,10 +360,11 @@ public class AdminDao {
 		}
 		return food;
 	}
-	
+
 	public NoticeBoard getNotice(int itemId) {
 		NoticeBoard noticeBoard = null;
-		try (Connection connection = dbConnection.getConnection()) {
+		try {
+			Connection connection = dbConnection.getConnection();
 			String query = "SELECT * FROM `noticeBoard` WHERE `id` = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, itemId);
@@ -378,7 +384,8 @@ public class AdminDao {
 
 	public QnABoard getQnA(int itemId) {
 		QnABoard qnaBoard = null;
-		try (Connection connection = dbConnection.getConnection()) {
+		try {
+			Connection connection = dbConnection.getConnection();
 			String query = "SELECT * FROM `qna` WHERE `id` = ?";
 			PreparedStatement preparedStatement = connection.prepareStatement(query);
 			preparedStatement.setInt(1, itemId);
