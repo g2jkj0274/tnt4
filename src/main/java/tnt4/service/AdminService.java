@@ -77,9 +77,8 @@ public class AdminService {
 		adminDao.modifyAdminNotice(itemId, modifyTitle, modifyDetail);
 	}
 	
-	public void modifyAdminQnA(int itemId, String userQuestionName, String userQuestionText,
-							   String modifyAdminAnswerName, String modifyAdminAnswerText) {
-		adminDao.modifyAdminQnA(itemId, userQuestionName, userQuestionText, modifyAdminAnswerName, modifyAdminAnswerText);
+	public void modifyAdminQnA(int itemId, String modifyAdminAnswerName, String modifyAdminAnswerText) {
+		adminDao.modifyAdminQnA(itemId, modifyAdminAnswerName, modifyAdminAnswerText);
 	}
 
 	public void deleteAdminSelectItem(String selectList, int itemId) {

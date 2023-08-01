@@ -221,8 +221,6 @@ public class AdminDao {
 			preparedStatement.setInt(7, itemId); // 아이템 ID는 맨 마지막에 설정
 
 			preparedStatement.executeUpdate();
-			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
-			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -242,8 +240,6 @@ public class AdminDao {
 			preparedStatement.setInt(6, itemId);
 
 			preparedStatement.executeUpdate();
-			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
-			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -260,15 +256,12 @@ public class AdminDao {
 			preparedStatement.setInt(3, itemId);
 
 			preparedStatement.executeUpdate();
-			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
-			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void modifyAdminQnA(int itemId, String userQuestionName, String userQuestionText,
-			String modifyAdminAnswerName, String modifyAdminAnswerText) {
+	public void modifyAdminQnA(int itemId, String modifyAdminAnswerName, String modifyAdminAnswerText) {
 		try {
 			Connection connection = dbConnection.getConnection();
 			String query = "UPDATE `qna` SET `adminAnswerName` = ?, `adminAnswerText` = ? WHERE `id` = ?";
@@ -278,8 +271,6 @@ public class AdminDao {
 			preparedStatement.setInt(3, itemId);
 
 			preparedStatement.executeUpdate();
-			// 추가적으로 입력 버퍼 비우기 위해 nextLine() 호출
-			sc.nextLine();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

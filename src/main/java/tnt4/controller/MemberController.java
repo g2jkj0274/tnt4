@@ -88,10 +88,34 @@ public class MemberController extends Controller {
 			}
 			break; // 남자, 여자 라고 잘입력해서 조건충족후 탈출
 		}
-		System.out.printf("키 : ");
-		int height = Integer.parseInt(sc.nextLine());
-		System.out.printf("몸무게 : ");
-		int weight = Integer.parseInt(sc.nextLine());
+		int height = 0;
+	    // 키 입력 받기
+	    while (true) {
+	        System.out.printf("키 : ");
+	        if (sc.hasNextInt()) {
+	            height = sc.nextInt();
+	            sc.nextLine(); // 버퍼 비우기
+	            break;
+	        } else {
+	            System.out.println("키를 숫자로 입력해주세요.");
+	            sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
+	            continue;
+	        }
+	    }
+	    int weight = 0;
+	    // 몸무게 입력 받기
+	    while (true) {
+	        System.out.printf("몸무게 : ");
+	        if (sc.hasNextInt()) {
+	            weight = sc.nextInt();
+	            sc.nextLine(); // 버퍼 비우기
+	            break;
+	        } else {
+	            System.out.println("몸무게를 숫자로 입력해주세요.");
+	            sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
+	            continue;
+	        }
+	    }
 
 		int bmiId = MemberController.getBmi(height, weight);
 		memberService.join(loginId, loginPw, name, gender, height, weight, bmiId);
@@ -135,7 +159,7 @@ public class MemberController extends Controller {
 		System.out.println("키:" + session.getLoginedMember().height);
 		System.out.println("몸무게:" + session.getLoginedMember().weight);
 		System.out.println("BMI:" + session.getLoginedMember().bmiId);
-
+		System.out.println("");
 		System.out.println("내가 추천한 운동과 식단");
 		System.out.println("--------------------------------------");
 		System.out.println("");
@@ -143,13 +167,14 @@ public class MemberController extends Controller {
 		printMemberLike();
 		
 		System.out.println("- - -");
-		System.out.println("돌아가기 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
+		System.out.println("메인화면 : 1 / 회원 정보 수정 : 2 / 비밀번호 변경 : 3 / 회원 탈퇴 : 4");
+		System.out.printf(">>> ");
 
 		while (true) {
 			String input = sc.nextLine();
 			switch (input) {
 			case "1":
-				return; // 돌아가기
+				return; // 메인화면
 			case "2":
 				doModify(); // 회원 정보 수정
 				return;
@@ -169,30 +194,34 @@ public class MemberController extends Controller {
 
 	// 비밀번호 변경
 	private void dochangePw() {
-		System.out.println("현재 비밀번호 : ");
-		String nowPw = sc.nextLine();
-		Member member = memberService.getMemberByLoginPw(nowPw);
-		if (member.loginPw.equals(nowPw) == false) {
-			System.out.println("비밀번호가 맞지 않습니다.");
-			return;
-		}
-		String loginPw = null;
-		String loginPwConfirm = null;
-		while (true) {
-			System.out.println("현재 아이디는 " + member.loginId);
-			System.out.printf("변경할 비밀번호 : ");
-			loginPw = sc.nextLine();
-			System.out.printf("비밀번호 확인 : ");
-			loginPwConfirm = sc.nextLine();
+	    System.out.println("현재 비밀번호 : ");
+	    String nowPw = sc.nextLine();
+	    Member member = memberService.getMemberByLoginPw(nowPw);
 
-			if (loginPw.equals(loginPwConfirm) == false) {
-				System.out.println("비밀번호를 다시 입력해주세요.");
-				continue;
-			}
-			memberService.changeNewPw(loginPw, member.loginId);
-			System.out.println("비밀번호 변경 완료");
-			break;
-		}
+	    if (member == null) {
+	        System.out.println("비밀번호가 맞지 않습니다.");
+	        dochangePw();
+	        return;
+	    }
+
+	    String loginPw = null;
+	    String loginPwConfirm = null;
+
+	    while (true) {
+	        System.out.println("현재 아이디는 " + member.loginId);
+	        System.out.printf("변경할 비밀번호 : ");
+	        loginPw = sc.nextLine();
+	        System.out.printf("비밀번호 확인 : ");
+	        loginPwConfirm = sc.nextLine();
+
+	        if (!loginPw.equals(loginPwConfirm)) {
+	            System.out.println("비밀번호를 다시 입력해주세요.");
+	            continue;
+	        }
+	        memberService.changeNewPw(loginPw, member.loginId);
+	        System.out.println("비밀번호 변경 완료");
+	        break;
+	    }
 	}
 
 	public static void doDelete(Session session) {
@@ -276,7 +305,7 @@ public class MemberController extends Controller {
 					System.out.print(" " + (i / 2) + ".    || ");
 
 				}
-				System.out.printf("%30s", memberLikeList.get(index) + "|| ");
+				System.out.printf("%30s", memberLikeList.get(index) + " || ");
 				if (j == 1) {
 					System.out.println();
 				}

@@ -335,6 +335,7 @@ public class OperationDao extends Dao {
 
 		dbConnection.insert(sb.toString());
 		System.out.println("추천 되었습니다.");
+		System.out.println("");
 	}
 
 	//// 추천 기록이 이미 있다면 추천 기록에서 제거해주는 함수
@@ -346,6 +347,7 @@ public class OperationDao extends Dao {
 				what));
 		dbConnection.insert(sb.toString());
 		System.out.println("이미 추천한 기록이 있어서 추천이 취소되었습니다.");
+		System.out.println("");
 	}
 
 	public void userWriteQnA(String userWriteQnAName, String userWriteQnAText) {

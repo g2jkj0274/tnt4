@@ -100,7 +100,7 @@ public class AdminController extends Controller {
 		List<Food> foodList = adminService.getAdminFoodList();
 		System.out.println("===== 식단 리스트 =====");
 		for (Food food : foodList) {
-			System.out.println("No." + food.getId() + " / 이름 : " + food.getName());
+			System.out.println("No." + food.id + " / 이름 : " + food.getName());
 		}
 		System.out.println("====================");
 		String selectList = "food";
@@ -178,13 +178,14 @@ public class AdminController extends Controller {
 			System.out.println("====================");
 			System.out.print(">>> ");
 			adminSelect = sc.nextLine();
-			switch (adminSelect) {
+			w1 : switch (adminSelect) {
 			case "main":
 				System.out.println("메인 화면으로 돌아갑니다.");
 				break;
 			case "delete":
 				deleteAdminSelectList(selectList);
-				break;
+				adminSelect="main";
+				break w1;
 			default:
 				System.out.println("다시 입력하세요.");
 				itemManagement(selectList);
@@ -255,20 +256,45 @@ public class AdminController extends Controller {
 			case "food":
 				System.out.print("음식명 : ");
 				String writeFoodName = sc.nextLine();
-				System.out.print("칼로리 : ");
-				int writeFoodKal = sc.nextInt();
-				sc.nextLine();
-				System.out.print("프로틴 : ");
-				int writeFoodPro = sc.nextInt();
-				sc.nextLine();
-				System.out.print("BMI ID : ");
-				int writeFoodBmiId = sc.nextInt();
-				sc.nextLine();
+				
+				int writeFoodKal = 0;
+			    while (true) {
+			        System.out.printf("칼로리 : ");
+			        if (sc.hasNextInt()) {
+			        	writeFoodKal = sc.nextInt();
+			            sc.nextLine(); // 버퍼 비우기
+			            break;
+			        } else {
+			            System.out.println("키를 숫자로 입력해주세요.");
+			            sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
+			            continue;
+			        }
+			    }
+			    
+			    int writeFoodPro = 0;
+			    while (true) {
+			        System.out.printf("프로틴 : ");
+			        if (sc.hasNextInt()) {
+			        	writeFoodPro = sc.nextInt();
+			            sc.nextLine(); // 버퍼 비우기
+			            break;
+			        } else {
+			            System.out.println("키를 숫자로 입력해주세요.");
+			            sc.nextLine(); // 잘못된 입력값 처리를 위해 버퍼 비우기
+			            continue;
+			        }
+			    }
+			    
+			    int writeFoodBmiId;
+				do {
+					System.out.print("BMI ID (1, 2, 3 중 하나 입력) : ");
+					writeFoodBmiId = sc.nextInt();
+					sc.nextLine();
+				} while (writeFoodBmiId < 1 || writeFoodBmiId > 3);
 				adminService.writeAdminFood(writeFoodName, writeFoodKal, writeFoodPro, writeFoodBmiId);
 				System.out.println("--------------------");
 				System.out.println("[입력한 값]");
-				System.out.printf(" - 음식명 : %s / 칼로리 : %s / 프로틴 : %s / BMI ID : %d \n", writeFoodName, writeFoodKal,
-						writeFoodPro, writeFoodBmiId);
+				System.out.printf(" - 음식명 : %s / 칼로리 : %s / 프로틴 : %s / BMI ID : %d \n", writeFoodName, writeFoodKal, writeFoodPro, writeFoodBmiId);
 				System.out.println("식단 아이템 추가가 완료되었습니다.");
 				break;
 			case "notice":
@@ -485,22 +511,16 @@ public class AdminController extends Controller {
 		System.out.printf(" - A.내용 : %s\n", qna.getAdminAnswerText());
 		System.out.println("--------------------");
 		// 수정할 정보 입력 받기
-		System.out.print("Q.제목 : ");
-		String modifyUserQuestionName = sc.nextLine();
-		System.out.print("Q.내용 : ");
-		String modifyUserQuestionText = sc.nextLine();
 		System.out.print("A.제목 : ");
 		String modifyAdminAnswerName = sc.nextLine();
 		System.out.print("A.내용 : ");
 		String modifyAdminAnswerText = sc.nextLine();
-		adminService.modifyAdminQnA(itemId, modifyUserQuestionName, modifyUserQuestionText,
-				modifyAdminAnswerName, modifyAdminAnswerText);
+		adminService.modifyAdminQnA(itemId, modifyAdminAnswerName, modifyAdminAnswerText);
 		System.out.println("--------------------");
 		System.out.printf("QnA (ID: %d) 수정이 완료되었습니다.\n", itemId);
 
 		// 데이터베이스에 QnA 정보 수정
-		adminService.modifyAdminQnA(itemId, modifyUserQuestionName, modifyUserQuestionText, modifyAdminAnswerName,
-				modifyAdminAnswerText);
+		adminService.modifyAdminQnA(itemId, modifyAdminAnswerName, modifyAdminAnswerText);
 
 		System.out.println("--------------------");
 		System.out.printf("QnA (ID: %d) 수정이 완료되었습니다.\n", itemId);
@@ -508,34 +528,31 @@ public class AdminController extends Controller {
 
 	// 선택한 리스트의 아이템 삭제
 	private void deleteAdminSelectList(String selectList) {
-		if (!selectList.equals("member")) {
-			System.out.println("--------------------");
-			System.out.println("삭제할 아이템의 ID를 입력하세요.");
-			System.out.print(">>> ");
-			int itemId;
-			if (sc.hasNextInt()) {
-				itemId = sc.nextInt();
-				sc.nextLine();
-			} else {
-				System.out.println("올바른 숫자를 입력하세요.");
-				sc.nextLine(); // 입력 버퍼 비우기
-				deleteAdminSelectList(selectList); // 재귀 호출로 다시 입력 받기
-				return;
-			}
-			System.out.println("--------------------");
-			System.out.println("삭제하시겠습니까? (Y/N)");
-			System.out.print(">>> ");
-			String confirm = sc.nextLine();
-			if (confirm.equalsIgnoreCase("Y")) {
-				adminService.deleteAdminSelectItem(selectList, itemId);
-				System.out.printf("아이템 (ID: %d) 삭제가 완료되었습니다.\n", itemId);
-			} else if (confirm.equalsIgnoreCase("N")) {
-				System.out.println("삭제를 취소합니다.");
-			} else {
-				System.out.println("잘못된 입력입니다. 삭제를 취소합니다.");
-			}
-		}
+	    System.out.println("--------------------");
+	    System.out.println("삭제할 아이템의 ID를 입력하세요.");
+	    System.out.print(">>> ");
+	    String input = sc.nextLine();
+
+	    try {
+	        int itemId = Integer.parseInt(input);
+	        System.out.println("--------------------");
+	        System.out.println("삭제하시겠습니까? (Y/N)");
+	        System.out.print(">>> ");
+	        String confirm = sc.nextLine();
+	        if (confirm.equalsIgnoreCase("Y")) {
+	            adminService.deleteAdminSelectItem(selectList, itemId);
+	            System.out.printf("아이템 (ID: %d) 삭제가 완료되었습니다.\n", itemId);
+	        } else if (confirm.equalsIgnoreCase("N")) {
+	            System.out.println("삭제를 취소합니다.");
+	        } else {
+	            System.out.println("잘못된 입력입니다. 삭제를 취소합니다.");
+	        }
+	    } catch (NumberFormatException e) {
+	        System.out.println("올바른 숫자를 입력하세요.");
+	    }
+	    System.out.println("아아아");
 	}
+
 
 	// 유효한 운동 장소인지 확인하는 메서드
 	private boolean isValidExercisePlace(String place) {
