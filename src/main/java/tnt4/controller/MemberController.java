@@ -50,6 +50,7 @@ public class MemberController extends Controller {
 
 	// 회원가입
 	public static void doJoin() {
+		System.out.println();
 		String loginId = null;
 
 		while (true) {
@@ -80,7 +81,7 @@ public class MemberController extends Controller {
 		String name = sc.nextLine();
 		String gender;
 		w1: while (true) {
-			System.out.printf("ex) 남자 , 여자 \n성별 :");
+			System.out.printf("남자 / 여자 \n성별 : ");
 			gender = sc.nextLine();
 			if (!gender.equals("남자") && !gender.equals("여자")) {
 				System.out.println("남자 또는 여자를 입력해주세요");
@@ -124,9 +125,10 @@ public class MemberController extends Controller {
 	}
 
 	public static String doLogin() {
+		System.out.println();
 		System.out.printf("로그인 아이디 : ");
 		String loginId = sc.nextLine();
-		System.out.printf("로그인 비번 : ");
+		System.out.printf("로그인 비밀번호 : ");
 		String loginPw = sc.nextLine();
 
 		// 입력받은 아이디에 해당하는 회원이 존재하는지

@@ -41,13 +41,15 @@ public class App {
 		while (true) {
 			String select = null;
 			if (!session.isLogined()) {
+				System.out.println();
 				System.out.println("[월요일]");
 				System.out.println("- 부터 요요 없는 일요일 까지!");
-				System.out.println("-------명령어 모음-------");
+				System.out.println();
+				System.out.println("=======명령어 모음=======");
 				System.out.println("로그인 : member login");
 				System.out.println("회원가입 : member join");
 				System.out.println("프로그램 종료: system exit");
-				System.out.println("----------------------");
+				System.out.println("======================");
 				System.out.printf(">>> ");
 				select = Container.getScanner().nextLine();
 
@@ -66,27 +68,25 @@ public class App {
 				}
 				continue;
 			}
-
-			System.out.println("");
-			System.out.println("");
 			System.out.println("");
 			List<String> exerciseList1 = operationService.getExerciseList();
-			System.out.println("===========랜덤 운동 Tip=============");
-			System.out.println("번호  ||                 이름               ||                  운동 영상 링크                       ||");
+			System.out.println("===========================================[랜덤 운동 Tip]================================================");
+			System.out.println("번호 ||                 이름                     ||                 운동 영상 링크                      ||");
 			System.out.println("----------------------------------------------------------------------------------------------------------");
 			operationController.printExerciseListByRandom(exerciseList1,1,3);
+			System.out.println("==========================================================================================================");
 			System.out.println("");
-			System.out.println("[명령어 모음]======================");
+			System.out.println("[Main Page]======================");
 			System.out.println(" - 운동 / 식단 선택 : select item");
 			System.out.println(" - 공지사항 : notice board");
 			System.out.println(" - My Page : member info");
 			System.out.println(" - 로그아웃 : member logout");
 			System.out.println(" - 프로그램 종료 : system exit");
-			System.out.println("================================");
+			System.out.println("=================================");
 
 			if (session.getLoginedMember().loginId.equals("admin")) {
 				System.out.println("");
-				System.out.println("[관리자 권한 명령어 목록]=============");
+				System.out.println("[관리자 권한 명령어 목록]=======");
 				System.out.println(" - 운동 관리 : exercise");
 				System.out.println(" - 식단 관리 : food");
 				System.out.println(" - 공지사항 관리 : notice");

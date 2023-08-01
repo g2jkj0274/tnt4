@@ -44,7 +44,6 @@ public class OperationDao extends Dao {
 
 		memberService = Container.memberService;
 		member = memberService.getMemberByLoginId(loginId);
-		System.out.println(member.bmiId);
 
 		// bmi id가 1, 3 인 사람은 bmi id 가 2인 운동도 추천 받게 하려고 아래 쿼리문 수정
 		try {
@@ -80,7 +79,6 @@ public class OperationDao extends Dao {
 
 		memberService = Container.memberService;
 		member = memberService.getMemberByLoginId(loginId);
-		System.out.println(member.bmiId);
 
 		try {
 			String query = "SELECT `name`,`id`,`like`,`link` FROM `exercise` WHERE location = ? AND kind = ? ORDER BY `like` DESC";
@@ -335,7 +333,6 @@ public class OperationDao extends Dao {
 
 		dbConnection.insert(sb.toString());
 		System.out.println("추천 되었습니다.");
-		System.out.println("");
 	}
 
 	//// 추천 기록이 이미 있다면 추천 기록에서 제거해주는 함수
@@ -347,7 +344,6 @@ public class OperationDao extends Dao {
 				what));
 		dbConnection.insert(sb.toString());
 		System.out.println("이미 추천한 기록이 있어서 추천이 취소되었습니다.");
-		System.out.println("");
 	}
 
 	public void userWriteQnA(String userWriteQnAName, String userWriteQnAText) {
