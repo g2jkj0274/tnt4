@@ -1,16 +1,13 @@
 package tnt4.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import tnt4.container.Container;
-import tnt4.controller.Session;
 import tnt4.db.DBConnection;
 import tnt4.dto.Exercise;
 import tnt4.dto.Food;
@@ -21,20 +18,15 @@ import tnt4.service.MemberService;
 
 public class OperationDao extends Dao {
 	private DBConnection dbConnection;
-	private Statement statement;
 	private ResultSet resultSet;
-	private Connection connection;
 	private Exercise exercise;
 	private Food food;
-	private static Session session;
 
-	private MemberDao memberDao;
 	private MemberService memberService;
 	private Member member;
 
 	public OperationDao() {
 		dbConnection = Container.getDBConnection();
-		session = Container.getSession();
 		memberService = Container.memberService;
 	}
 

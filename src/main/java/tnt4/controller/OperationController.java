@@ -70,10 +70,10 @@ public class OperationController extends Controller {
 			System.out.println();
 
 			System.out.println("[공지사항 및 QnA]===========");
-			System.out.println("공지사항 보기 : board ID");
-			System.out.println("QnA 보기 : QnA ID");
-			System.out.println("QnA 작성 : QnA write");
-			System.out.println("메인으로 돌아가기 : main");
+			System.out.println(" - 공지사항 보기 : board ID");
+			System.out.println(" - QnA 보기 : QnA ID");
+			System.out.println(" - QnA 작성 : QnA write");
+			System.out.println(" - 메인으로 돌아가기 : main");
 			System.out.println("============================");
 			System.out.printf(">>> ");
 			String userInput = sc.nextLine();
@@ -151,6 +151,7 @@ public class OperationController extends Controller {
 	// QnA 작성 기능
 	private void userWriteQnA() {
 		System.out.println("");
+		System.out.println("QnA 질문을 작성하세요.");
 		System.out.println("===========================================================================");
 		System.out.printf("질문 : ");
 		String userWriteQnAName = sc.nextLine();

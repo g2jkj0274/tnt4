@@ -78,7 +78,7 @@ public class App {
 			System.out.println("");
 			System.out.println("[Main Page]======================");
 			System.out.println(" - 운동 / 식단 선택 : select item");
-			System.out.println(" - 공지사항 : notice board");
+			System.out.println(" - 공지사항 / QnA : notice board");
 			System.out.println(" - My Page : member info");
 			System.out.println(" - 로그아웃 : member logout");
 			System.out.println(" - 프로그램 종료 : system exit");
