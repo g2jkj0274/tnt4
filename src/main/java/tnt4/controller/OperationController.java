@@ -11,13 +11,11 @@ import tnt4.service.OperationService;
 public class OperationController extends Controller {
 	private Scanner sc;
 	private String command;
-	private Session session;
 	private OperationService operationService;
 
 	// 생성자 - 스캐너, 세션(현재 유저 정보), 서비스 사용 가능하게 함
 	public OperationController() {
 		sc = Container.getScanner();
-		session = Container.getSession();
 		operationService = Container.operationService;
 	}
 
