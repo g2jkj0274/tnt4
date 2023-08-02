@@ -18,7 +18,6 @@ import tnt4.service.MemberService;
 
 public class OperationDao extends Dao {
 	private DBConnection dbConnection;
-	private ResultSet resultSet;
 	private Exercise exercise;
 	private Food food;
 

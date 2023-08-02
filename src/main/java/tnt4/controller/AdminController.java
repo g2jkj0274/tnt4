@@ -13,16 +13,14 @@ import tnt4.service.AdminService;
 public class AdminController extends Controller {
 	private Scanner sc;
 	private AdminService adminService;
-	private String command;
 	private int lastDisplayedQnAId = 0;
 
 	public AdminController() {
 		sc = Container.getScanner();
 		adminService = Container.getAdminService();
 	}
-
+	
 	public void doAction(String command, String loginId) {
-		this.command = command;
 		switch (command) {
 		case "exercise":
 			adminSelectPlace();
@@ -63,7 +61,7 @@ public class AdminController extends Controller {
 	// 운동 장소(유산소/무산소) 구분
 	private void adminSelectExercise(String selectPlace) {
 		System.out.println();
-		System.out.println("장소를 입력하세요.");
+		System.out.println("종류를 입력하세요.");
 		System.out.println("유산소 / 무산소");
 		System.out.print(">>> ");
 		String selectExercise = sc.nextLine();
@@ -513,7 +511,6 @@ public class AdminController extends Controller {
 	        System.out.println("올바른 숫자를 입력하세요.");
 	    }
 	}
-
 
 	// 유효한 운동 장소인지 확인하는 메서드
 	private boolean isValidExercisePlace(String place) {
