@@ -399,7 +399,7 @@ public class OperationController extends Controller {
 
 		int[] box = random(foodList.size(), 5, 5);
 		System.out.println("");
-		System.out.println("================[회원님 맞춤 다이어트 식단]===========================");
+		System.out.println("================[회원님 맞춤 다이어트 식단]==========================");
 		System.out.println("No. ||     이름       ||  추천수   || 100g당 칼로리 / 단백질 g ");
 		System.out.println("---------------------------------------------------------------------");
 		for (int i = 0; i < 5; i += 1) { // 5개까지만 나오게하려고
@@ -417,7 +417,7 @@ public class OperationController extends Controller {
 		System.out.println("");
 
 		System.out.println(" ");
-		System.out.println("===========================[전체 다이어트 식단]=======================");
+		System.out.println("===========================[전체 다이어트 식단]======================");
 		System.out.println("No. ||     이름       ||  추천수   || 100g당 칼로리 / 단백질 g ");
 		System.out.println("---------------------------------------------------------------------");
 		for (int i = 0; i < foodList.size(); i += 5) { // 3개까지만 나오게하려고 12를 적음
