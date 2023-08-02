@@ -150,10 +150,9 @@ public class OperationController extends Controller {
 
 	// QnA 작성 기능
 	private void userWriteQnA() {
-		System.out.println("");
 		System.out.println("QnA 질문을 작성하세요.");
 		System.out.println("===========================================================================");
-		System.out.printf("질문 : ");
+		System.out.printf("제목 : ");
 		String userWriteQnAName = sc.nextLine();
 		System.out.printf("내용 : ");
 		String userWriteQnAText = sc.nextLine();
