@@ -157,13 +157,13 @@ public class MemberController extends Controller {
 	// My Page
 	private void showInfo() {
 		System.out.println();
-		System.out.println("==[내 정보]==");
-		System.out.println("이름:" + session.getLoginedMember().name);
-		System.out.println("성별:" + session.getLoginedMember().gender);
-		System.out.println("키:" + session.getLoginedMember().height);
-		System.out.println("몸무게:" + session.getLoginedMember().weight);
-		System.out.println("BMI:" + session.getLoginedMember().bmiId);
-		System.out.println("=============");
+		System.out.println("===[내 정보]===");
+		System.out.println("이름 : " + session.getLoginedMember().name);
+		System.out.println("성별 : " + session.getLoginedMember().gender);
+		System.out.println("키 : " + session.getLoginedMember().height);
+		System.out.println("몸무게  :" + session.getLoginedMember().weight);
+		System.out.println("BMI : " + session.getLoginedMember().bmiId);
+		System.out.println("===============");
 
 		System.out.println("");
 
